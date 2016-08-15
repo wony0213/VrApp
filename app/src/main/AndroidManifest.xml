@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.catr.test.vrapp">
+
+    <!-- These permissions are used by Google VR SDK to get the best Google VR headset profiles. ! -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <!--
+    The app has largeHeap enabled. Since 2k stereo images (2048px wide, 1024px
+    high, 2 images, 4 bytes per pixel) only use 16M of RAM, this option isn't
+    required for most cases. However, applications that open larger images or
+    handle multiple panoramas might run out of memory in the default
+    configuration.
+    -->
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/cttlvrlogo"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- android:theme="@android:style/Theme.Holo.Light" -->
+        <!-- android:theme="@style/AppTheme" -->
+
+        <activity
+            android:name=".activity.MainActivity">
+
+        </activity>
+        <!--add by glf
+        添加android:exported="true",才能使用命令行打开-->
+        <activity
+            android:name=".activity.VrPanoramaActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activity.LaunchActivity"
+                  android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="com.google.intent.category.CARDBOARD"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".appintro.AppIntroActivity"/>
+    </application>
+
+</manifest>
