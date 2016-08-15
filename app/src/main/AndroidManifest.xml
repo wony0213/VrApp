@@ -46,6 +46,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".appintro.AppIntroActivity"/>
+        <activity android:name=".activity.PermissionCheckActivity"/>
+        <activity android:name=".activity.TestActivity"/>
+
     </application>
 
 </manifest>
