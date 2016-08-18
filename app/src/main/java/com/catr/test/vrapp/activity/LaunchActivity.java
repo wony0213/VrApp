@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
+import com.catr.test.vrapp.Config;
 import com.catr.test.vrapp.R;
 import com.catr.test.vrapp.appintro.AppIntroActivity;
 
@@ -42,17 +43,27 @@ public class LaunchActivity extends PermissionCheckActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                checkExternalStoragePerm(new PermissionGrantedCallback() {
-                    @Override
-                    public void doSomething() {
-                        if (VrApp.isFirstStart(mContext)) {
-                            startAppIntro();
-                            VrApp.setFirstStart(mContext);
-                        } else {
-                            startVrPanoActivity();
+                if (Config.versionFlag == Config.SDCARD_VERSION) {
+                    checkExternalStoragePerm(new PermissionGrantedCallback() {
+                        @Override
+                        public void doSomething() {
+                            if (VrApp.isFirstStart(mContext)) {
+                                startAppIntro();
+                                VrApp.setFirstStart(mContext);
+                            } else {
+                                startVrPanoActivity();
+                            }
                         }
+                    });
+                } else if (Config.versionFlag == Config.ASSETS_VERSION){
+                    if (VrApp.isFirstStart(mContext)) {
+                        startAppIntro();
+                        VrApp.setFirstStart(mContext);
+                    } else {
+                        startVrPanoActivity();
                     }
-                });
+                }
+
             }
 
             @Override
