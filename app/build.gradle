@@ -28,14 +28,7 @@ dependencies {
     compile project(':lib-commonwidget')
     compile project(':lib-panowidget')
     compile project(':lib-videowidget')
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile 'com.github.paolorotolo:appintro:4.0.0'
+    compile project(':appIntro')
 }
 
 dependencies {
