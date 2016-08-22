@@ -2,6 +2,7 @@ package com.catr.test.vrapp.appintro;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.catr.test.vrapp.R;
 import com.catr.test.vrapp.activity.VrApp;
@@ -40,23 +41,26 @@ public class AppIntroActivity extends BaseAppIntro{
         finish();
     }
 
-    @Override
-    public void onSkipPressed() {
-        startVrPanoActivity();
-    }
+//    @Override
+//    public void onSkipPressed() {
+//        startVrPanoActivity();
+//    }
 
-    @Override
-    public void onNextPressed() {
+//    @Override
+//    public void onNextPressed() {
+//
+//    }
 
-    }
-
-    @Override
-    public void onDonePressed() {
-        startVrPanoActivity();
-    }
+//    @Override
+//    public void onDonePressed() {
+//        startVrPanoActivity();
+//    }
 
     @Override
     public void onSlideChanged() {
 
+    }
+    public void getStarted(View v){
+        startVrPanoActivity();
     }
 }

@@ -1,1 +1,1 @@
-include ':app', ':lib-base', ':lib-common', ':lib-commonwidget', ':lib-panowidget', ':lib-videowidget', ':appIntro'
+include ':app', ':lib-base', ':lib-common', ':lib-commonwidget', ':lib-panowidget', ':lib-videowidget', ':appintro'

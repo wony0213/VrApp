@@ -85,7 +85,7 @@ public class VrPanoramaActivity extends Activity {
 
     //默认使用VR横屏模式
     private static final int DEFAULT_DISPLAYMODE = VrWidgetView.DisplayMode.FULLSCREEN_STEREO;
-    private int vrDisplayMode = DEFAULT_DISPLAYMODE;
+    private int vrDisplayMode;
 
     //第一个加载的全景图片是否完成。
     private boolean isFirstLoadSuccess = false;
@@ -119,6 +119,9 @@ public class VrPanoramaActivity extends Activity {
 //            }
 //        });
 
+
+        Intent intent = getIntent();
+        vrDisplayMode=intent.getIntExtra(VrApp.DISPLAY_MODE,DEFAULT_DISPLAYMODE);
         //默认使用VR横屏模式
         panoWidgetView.setDisplayMode(vrDisplayMode);
 

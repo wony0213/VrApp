@@ -15,15 +15,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.paolorotolo.appintro.util.LogHelper;
-
 abstract class AppIntroBaseFragment extends Fragment implements ISlideSelectionListener, ISlideBackgroundColorHolder {
-    private static final String TAG = LogHelper.makeLogTag(AppIntroBaseFragment.class);
+    private static final String TAG = "AppIntroBaseFragment";
 
     protected static final String ARG_TITLE = "title";
-    protected static final String ARG_TITLE_TYPEFACE = "title_typeface";
     protected static final String ARG_DESC = "desc";
-    protected static final String ARG_DESC_TYPEFACE = "desc_typeface";
     protected static final String ARG_DRAWABLE = "drawable";
     protected static final String ARG_BG_COLOR = "bg_color";
     protected static final String ARG_TITLE_COLOR = "title_color";
@@ -31,7 +27,7 @@ abstract class AppIntroBaseFragment extends Fragment implements ISlideSelectionL
 
 
     private int drawable, bgColor, titleColor, descColor, layoutId;
-    private String title, titleTypeface, description, descTypeface;
+    private String title, description;
 
     private LinearLayout mainLayout;
 
@@ -47,9 +43,7 @@ abstract class AppIntroBaseFragment extends Fragment implements ISlideSelectionL
         if (getArguments() != null && getArguments().size() != 0) {
             drawable = getArguments().getInt(ARG_DRAWABLE);
             title = getArguments().getString(ARG_TITLE);
-            titleTypeface = getArguments().containsKey(ARG_TITLE_TYPEFACE) ? getArguments().getString(ARG_TITLE_TYPEFACE) : "";
             description = getArguments().getString(ARG_DESC);
-            descTypeface = getArguments().containsKey(ARG_DESC_TYPEFACE) ? getArguments().getString(ARG_DESC_TYPEFACE) : "";
             bgColor = getArguments().getInt(ARG_BG_COLOR);
             titleColor = getArguments().containsKey(ARG_TITLE_COLOR) ? getArguments().getInt(ARG_TITLE_COLOR) : 0;
             descColor = getArguments().containsKey(ARG_DESC_COLOR) ? getArguments().getInt(ARG_DESC_COLOR) : 0;
@@ -63,9 +57,8 @@ abstract class AppIntroBaseFragment extends Fragment implements ISlideSelectionL
         if(savedInstanceState != null) {
             drawable = savedInstanceState.getInt(ARG_DRAWABLE);
             title = savedInstanceState.getString(ARG_TITLE);
-            titleTypeface = savedInstanceState.getString(ARG_TITLE_TYPEFACE);
             description = savedInstanceState.getString(ARG_DESC);
-            descTypeface = savedInstanceState.getString(ARG_DESC_TYPEFACE);
+
             bgColor = savedInstanceState.getInt(ARG_BG_COLOR);
             titleColor = savedInstanceState.getInt(ARG_TITLE_COLOR);
             descColor = savedInstanceState.getInt(ARG_DESC_COLOR);
@@ -87,22 +80,12 @@ abstract class AppIntroBaseFragment extends Fragment implements ISlideSelectionL
         if (titleColor != 0) {
             t.setTextColor(titleColor);
         }
-        if (titleTypeface != null && titleTypeface.equals("")){
-            if (CustomFontCache.get(titleTypeface,getContext()) != null){
-                t.setTypeface(CustomFontCache.get(titleTypeface,getContext()));
-            }
 
-        }
         d.setText(description);
         if (descColor != 0) {
             d.setTextColor(descColor);
         }
-        if (descTypeface != null && descTypeface.equals("")){
-            if (CustomFontCache.get(descTypeface,getContext()) != null){
-                d.setTypeface(CustomFontCache.get(descTypeface,getContext()));
-            }
 
-        }
         i.setImageDrawable(ContextCompat.getDrawable(getActivity(), drawable));
         mainLayout.setBackgroundColor(bgColor);
 
@@ -124,12 +107,12 @@ abstract class AppIntroBaseFragment extends Fragment implements ISlideSelectionL
 
     @Override
     public void onSlideDeselected() {
-        LogHelper.d(TAG, String.format("Slide %s has been deselected.", title));
+        Log.d(TAG, String.format("Slide %s has been deselected.", title));
     }
 
     @Override
     public void onSlideSelected() {
-        LogHelper.d(TAG, String.format("Slide %s has been selected.", title));
+        Log.d(TAG, String.format("Slide %s has been selected.", title));
     }
 
 

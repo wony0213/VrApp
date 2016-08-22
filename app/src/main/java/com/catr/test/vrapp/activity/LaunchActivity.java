@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.catr.test.vrapp.Config;
 import com.catr.test.vrapp.R;
 import com.catr.test.vrapp.appintro.AppIntroActivity;
+import com.google.vr.sdk.widgets.common.VrWidgetView;
 
 /**
  * Created by Wony on 2016/8/13.
@@ -19,6 +22,8 @@ public class LaunchActivity extends PermissionCheckActivity {
     private static final String TAG = "LaunchActivity";
 
     private final Context mContext = this;
+    private LinearLayout btn_layout;
+    private Button cardboardBtn,monoBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +56,8 @@ public class LaunchActivity extends PermissionCheckActivity {
                                 startAppIntro();
                                 VrApp.setFirstStart(mContext);
                             } else {
-                                startVrPanoActivity();
+                                //startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
+                                showBtn();
                             }
                         }
                     });
@@ -60,7 +66,8 @@ public class LaunchActivity extends PermissionCheckActivity {
                         startAppIntro();
                         VrApp.setFirstStart(mContext);
                     } else {
-                        startVrPanoActivity();
+                       // startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
+                        showBtn();
                     }
                 }
 
@@ -89,13 +96,32 @@ public class LaunchActivity extends PermissionCheckActivity {
         finish();
     }
 
-    private void startVrPanoActivity() {
+    private void startVrPanoActivity(int display_mode) {
         //启动Activity，并finish（）
         Intent intent = new Intent(this, VrPanoramaActivity.class);
         //从第一张全景照片开始播放
         intent.putExtra(VrApp.PANORAMA_NUM, 0);
+        intent.putExtra(VrApp.DISPLAY_MODE,display_mode);
         startActivity(intent);
         //结束LaunchActivity
         finish();
+    }
+    public void showBtn(){
+        btn_layout=(LinearLayout) findViewById(R.id.btn_layout);
+        btn_layout.setVisibility(View.VISIBLE);
+        cardboardBtn=(Button) findViewById(R.id.cardboard_btn);
+        monoBtn=(Button) findViewById(R.id.mono_btn);
+        cardboardBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
+            }
+        });
+        monoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_MONO);
+            }
+        });
     }
 }
