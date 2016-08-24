@@ -28,7 +28,7 @@ dependencies {
     compile project(':lib-commonwidget')
     compile project(':lib-panowidget')
     compile project(':lib-videowidget')
-    compile project(':appIntro')
+    compile project(':appintro')
 }
 
 dependencies {

@@ -35,7 +35,7 @@
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"/>
 
-            <Button
+          <!--  <Button
                 android:id="@+id/skip"
                 style="@style/AppIntroButtonStyleCompat"
                 android:layout_width="wrap_content"
@@ -45,16 +45,6 @@
                 android:minWidth="100dp"
                 android:text="@string/skip_button"
                 android:textColor="@android:color/white"/>
-            <ImageButton
-                android:id="@+id/back"
-                style="@style/AppIntroButtonStyleCompat"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_gravity="left"
-                android:layout_marginLeft="8dp"
-                android:minWidth="100dp"
-                android:visibility="invisible"
-                android:src="@drawable/ic_navigate_previous_white_24dp"/>
 
             <ImageButton
                 android:id="@+id/next"
@@ -77,7 +67,7 @@
                 android:paddingRight="16dp"
                 android:text="@string/done_button"
                 android:textColor="@android:color/white"
-                android:visibility="gone"/>
+                android:visibility="gone"/>!-->
         </FrameLayout>
     </LinearLayout>
 </RelativeLayout>

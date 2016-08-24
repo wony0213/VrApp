@@ -35,12 +35,12 @@ public abstract class AppIntro2 extends AppIntroBase {
     /**
      * Shows or hides Done button, replaced with setProgressButtonEnabled
      *
-     * @deprecated use {@link #setProgressButtonEnabled(boolean)} instead.
+     * @deprecated use {@link #//setProgressButtonEnabled(boolean)} instead.
      */
-    @Deprecated
+   /* @Deprecated
     public void showDoneButton(boolean showDone) {
         setProgressButtonEnabled(showDone);
-    }
+    }*/
 
     /**
      * Override Next button
