@@ -74,8 +74,8 @@ public class VrPanoramaActivity extends Activity {
     private VrPanoFileInfo vrPanoFileInfo;
     private int panoramaNum = 0;
 
-    private TextView panoTile;
-    private TextView panoDescription;
+//    private TextView panoTile;
+//    private TextView panoDescription;
 
     private Context mContext;
 
@@ -107,7 +107,7 @@ public class VrPanoramaActivity extends Activity {
         Log.i(TAG, "VrPanoramaActivity onCreate()");
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vr_panorama);
+        setContentView(R.layout.creative_layout);
 
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new ActivityEventListener());
@@ -125,8 +125,8 @@ public class VrPanoramaActivity extends Activity {
         //默认使用VR横屏模式
         panoWidgetView.setDisplayMode(vrDisplayMode);
 
-        panoTile = (TextView) findViewById(R.id.tv_title);
-        panoDescription = (TextView) findViewById(R.id.tv_description);
+//        panoTile = (TextView) findViewById(R.id.tv_title);
+//        panoDescription = (TextView) findViewById(R.id.tv_description);
 
         mContext = this;
 
@@ -165,8 +165,8 @@ public class VrPanoramaActivity extends Activity {
             vrPanoFileInfo = vrPanoFileInfos.get(panoramaNum);
             Log.i(TAG, "show pano image " + vrPanoFileInfo.getFileName());
 
-            panoTile.setText(vrPanoFileInfo.getFileName());
-            panoDescription.setText(vrPanoFileInfo.getFileName());
+//            panoTile.setText(vrPanoFileInfo.getFileName());
+//            panoDescription.setText(vrPanoFileInfo.getFileName());
 
 
             mMediaUtil = new MediaUtil();
@@ -340,15 +340,15 @@ public class VrPanoramaActivity extends Activity {
                 mMediaUtil.stop();
             }
 
-            if (isShowBlackPano) {
-                //延时一定时间后显示下一张全景照片
-                mHandler.postDelayed(new Runnable() {
-                    public void run() {
-                        //显示下一张全景照片
-                        loadNextPano();
-                    }
-                }, 2000);
-            }
+//            if (isShowBlackPano) {
+//                //延时一定时间后显示下一张全景照片
+//                mHandler.postDelayed(new Runnable() {
+//                    public void run() {
+//                        //显示下一张全景照片
+//                        loadNextPano();
+//                    }
+//                }, 2000);
+//            }
 
         }
 
@@ -381,7 +381,8 @@ public class VrPanoramaActivity extends Activity {
             vibrator.vibrate(50);
 
             //显示黑屏（带Logo）
-            loadBlackPano();
+           // loadBlackPano();
+            loadNextPano();
 //            //延时一定时间后显示下一张全景照片
 //            mHandler.postDelayed(new Runnable(){
 //                public void run() {
@@ -417,8 +418,8 @@ public class VrPanoramaActivity extends Activity {
             panoramaNum = panoramaNum - vrPanoFileInfos.size();
         vrPanoFileInfo = vrPanoFileInfos.get(panoramaNum);
 
-        panoTile.setText(vrPanoFileInfo.getFileName());
-        panoDescription.setText(vrPanoFileInfo.getFileName());
+//        panoTile.setText(vrPanoFileInfo.getFileName());
+//        panoDescription.setText(vrPanoFileInfo.getFileName());
 
         mMediaUtil.load(mContext, vrPanoFileInfo.getSoundName(), vrPanoFileInfo.getSoundUri());
 

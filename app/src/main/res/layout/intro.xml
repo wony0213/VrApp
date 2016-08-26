@@ -17,7 +17,7 @@
         android:textColor="#ffffff"
         android:paddingRight="32dp"
         android:textSize="16sp"
-        android:text="Welcome to CAICT VR"/>
+        android:text="Welcome to CTTL VR"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
