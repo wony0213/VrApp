@@ -24,9 +24,16 @@ public class MediaUtil {
 
     static {
         mediaResMap = new HashMap<>();
-        mediaResMap.put("caict.mp3", R.raw.caict);
-        mediaResMap.put("lab_ten_floor.mp3", R.raw.lab_ten_floor);
-        mediaResMap.put("lab_three_floor.mp3", R.raw.lab_three_floor);
+//        mediaResMap.put("caict.mp3", R.raw.caict);
+//        mediaResMap.put("lab_ten_floor.mp3", R.raw.lab_ten_floor);
+//        mediaResMap.put("lab_three_floor.mp3", R.raw.lab_three_floor);
+        mediaResMap.put("audio001.mp3", R.raw.audio001);
+        mediaResMap.put("audio002.mp3", R.raw.audio002);
+        mediaResMap.put("audio003.mp3", R.raw.audio003);
+        mediaResMap.put("audio004.mp3", R.raw.audio004);
+        mediaResMap.put("audio005.mp3", R.raw.audio005);
+        mediaResMap.put("audio006.mp3", R.raw.audio006);
+        mediaResMap.put("audio007.mp3", R.raw.audio007);
     }
 
     private Context mContext;

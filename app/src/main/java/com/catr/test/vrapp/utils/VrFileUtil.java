@@ -66,10 +66,16 @@ public class VrFileUtil {
             //从asset文件夹读取文件信息，手动添加
             vrPanoFileInfos = new ArrayList<>();
 
-            vrPanoFileInfos.add(new VrPanoFileInfo("caict-mono-1.jpg", "中国信息通信研究院", null, "caict.mp3", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-            vrPanoFileInfos.add(new VrPanoFileInfo("lab_ten_floor-mono-2.jpg", "十楼实验室", null, "lab_ten_floor.mp3", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-            vrPanoFileInfos.add(new VrPanoFileInfo("lab_three_floor-mono-3.jpg", "三楼实验室", null, "lab_three_floor.mp3", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-
+//            vrPanoFileInfos.add(new VrPanoFileInfo("caict-mono-1.jpg", "中国信息通信研究院", null, "caict.mp3", null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("lab_ten_floor-mono-2.jpg", "十楼实验室", null, "lab_ten_floor.mp3", null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("lab_three_floor-mono-3.jpg", "三楼实验室", null, "lab_three_floor.mp3", null, VrPanoFileInfo.INPUT_TYPE_MONO));
+            vrPanoFileInfos.add(new VrPanoFileInfo("waijingzhulou-mono-1.jpg", "中国信息通信研究院", null, "audio001.mp3", null, VrPanoFileInfo.INPUT_TYPE_MONO));
+            vrPanoFileInfos.add(new VrPanoFileInfo("waijingzhulou-mono-2.jpg", "十楼实验室", null, "audio002.mp3", null, VrPanoFileInfo.INPUT_TYPE_MONO));
+            vrPanoFileInfos.add(new VrPanoFileInfo("first_floor_moniwangshiyanshiB-mono-3.jpg", "三楼实验室", null, "audio003.mp3", null, VrPanoFileInfo.INPUT_TYPE_MONO));
+            vrPanoFileInfos.add(new VrPanoFileInfo("third_floor_apkudoshiyanshi-mono-4.jpg", "中国信息通信研究院", null, "audio004.mp3", null, VrPanoFileInfo.INPUT_TYPE_MONO));
+            vrPanoFileInfos.add(new VrPanoFileInfo("third_floor_zidonghuaceshishiyanshiA-mono-5.jpg", "十楼实验室", null, "audio005.mp3", null, VrPanoFileInfo.INPUT_TYPE_MONO));
+            vrPanoFileInfos.add(new VrPanoFileInfo("third_floor_jixieshoushiyanshi-mono-6.jpg", "三楼实验室", null, "audio006.mp3", null, VrPanoFileInfo.INPUT_TYPE_MONO));
+            vrPanoFileInfos.add(new VrPanoFileInfo("ten_floor_jixieshoushiyanshi-mono-7.jpg", "三楼实验室", null, "audio007.mp3", null, VrPanoFileInfo.INPUT_TYPE_MONO));
             return vrPanoFileInfos;
         }
     }
