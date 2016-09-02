@@ -73,6 +73,7 @@ public class PanoListAdapter extends BaseAdapter{
                 viewHolder2.mCountryTv2 = (TextView) convertView.findViewById(R.id.country_tv2);
                 viewHolder2.mCity2 = (TextView)  convertView.findViewById(R.id.city_tv2);
                 viewHolder2.mPanoView = (VrPanoramaView) convertView.findViewById(R.id.pano_view_list);
+                viewHolder2.mTempImgView=(ImageView) convertView.findViewById(R.id.tempview_iv) ;
                 convertView.setTag(viewHolder2);
             }
 
@@ -92,10 +93,13 @@ public class PanoListAdapter extends BaseAdapter{
             viewHolder2.mPlaceNameTv2.setText(mPlaceName[position]);
             viewHolder2.mCountryTv2.setText(mCountry[position]);
             viewHolder2.mCity2.setText(mCity[position]);
+            viewHolder2.mTempImgView.setVisibility(View.VISIBLE);
+            viewHolder2.mTempImgView.setBackgroundResource(mImgs[position]);
+            viewHolder2.mPanoView.setVisibility(View.GONE);
             viewHolder2.mPanoView.setInfoButtonEnabled(false);
             viewHolder2.mPanoView.setFullscreenButtonEnabled(false);
             viewHolder2.mPanoView.setStereoModeButtonEnabled(false);
-            PanoViewLoaderTask mPanoViewLoaderTask=new PanoViewLoaderTask(mContext,viewHolder2.mPanoView,mPanoImgs[position]);
+            PanoViewLoaderTask mPanoViewLoaderTask=new PanoViewLoaderTask(mContext,viewHolder2.mPanoView,viewHolder2.mTempImgView,mPanoImgs[position]);
             mPanoViewLoaderTask.execute();
         }
 
@@ -130,15 +134,18 @@ public class PanoListAdapter extends BaseAdapter{
         TextView  mCountryTv2;
         TextView mCity2;
         VrPanoramaView mPanoView;
+        ImageView mTempImgView;
     }
     public class PanoViewLoaderTask extends AsyncTask<String, Void, Boolean> {
         private Context mContext;
         private VrPanoramaView mVrPanoramaView;
         private String mPanoImgName;
-        public PanoViewLoaderTask(Context context, VrPanoramaView vrPanoramaView,String panoImgName){
+        private ImageView mTempView;
+        public PanoViewLoaderTask(Context context, VrPanoramaView vrPanoramaView,ImageView tempView,String panoImgName){
             mContext=context;
             mVrPanoramaView=vrPanoramaView;
             mPanoImgName=panoImgName;
+            mTempView=tempView;
         }
 
         /**
@@ -165,12 +172,23 @@ public class PanoListAdapter extends BaseAdapter{
 
             mVrPanoramaView.loadImageFromBitmap(BitmapFactory.decodeStream(istr),panoOptions);
 
+
             try {
                 istr.close();
             } catch (IOException e) {
                 Log.e("PanoViewLoader", "Could not close input stream: " + e);
             }
             return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isSucLoad) {
+            super.onPostExecute(isSucLoad);
+            if(isSucLoad){
+                mVrPanoramaView.setVisibility(View.VISIBLE);
+                mTempView.setVisibility(View.GONE);
+            }
+
         }
     }
 }
