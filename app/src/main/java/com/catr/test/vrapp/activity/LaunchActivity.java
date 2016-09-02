@@ -23,16 +23,12 @@ public class LaunchActivity extends PermissionCheckActivity {
 
     private final Context mContext = this;
     private LinearLayout btn_layout;
-    private Button cardboardBtn,monoBtn;
+    private Button cardboardBtn, monoBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //启动AppIntro
-//        startAppIntro();
-
-        //
         final View view = View.inflate(this, R.layout.activity_launch, null);
         setContentView(view);
 
@@ -56,20 +52,20 @@ public class LaunchActivity extends PermissionCheckActivity {
                                 startAppIntro();
                                 VrApp.setFirstStart(mContext);
                             } else {
-                                //startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
-                               // showBtn();
-                                startMainActivity();
+//                                startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
+//                                showBtn();
+                                startPanoListActivity();
                             }
                         }
                     });
-                } else if (Config.versionFlag == Config.ASSETS_VERSION){
+                } else if (Config.versionFlag == Config.ASSETS_VERSION) {
                     if (VrApp.isFirstStart(mContext)) {
                         startAppIntro();
                         VrApp.setFirstStart(mContext);
                     } else {
-                       // startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
-                       // showBtn();
-                        startMainActivity();
+//                        startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
+//                        showBtn();
+                        startPanoListActivity();
                     }
                 }
 
@@ -98,21 +94,30 @@ public class LaunchActivity extends PermissionCheckActivity {
         finish();
     }
 
+    private void startPanoListActivity() {
+        //启动Activity，并finish（）
+        Intent intent = new Intent(this, PanoListActivity.class);
+        startActivity(intent);
+        //结束LaunchActivity
+        finish();
+    }
+
     private void startVrPanoActivity(int display_mode) {
         //启动Activity，并finish（）
         Intent intent = new Intent(this, VrPanoramaActivity.class);
         //从第一张全景照片开始播放
         intent.putExtra(VrApp.PANORAMA_NUM, 0);
-        intent.putExtra(VrApp.DISPLAY_MODE,display_mode);
+        intent.putExtra(VrApp.DISPLAY_MODE, display_mode);
         startActivity(intent);
         //结束LaunchActivity
         finish();
     }
-    public void showBtn(){
-        btn_layout=(LinearLayout) findViewById(R.id.btn_layout);
+
+    private void showBtn() {
+        btn_layout = (LinearLayout) findViewById(R.id.btn_layout);
         btn_layout.setVisibility(View.VISIBLE);
-        cardboardBtn=(Button) findViewById(R.id.cardboard_btn);
-        monoBtn=(Button) findViewById(R.id.mono_btn);
+        cardboardBtn = (Button) findViewById(R.id.cardboard_btn);
+        monoBtn = (Button) findViewById(R.id.mono_btn);
         cardboardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

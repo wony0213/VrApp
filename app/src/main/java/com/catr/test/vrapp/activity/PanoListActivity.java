@@ -30,10 +30,8 @@ public class PanoListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplication(), VrPanoramaActivity.class);
-                //从第一张全景照片开始播放
                 intent.putExtra(VrApp.PANORAMA_NUM, position);
                 startActivity(intent);
-                //结束LaunchActivity
                 finish();
             }
         });
@@ -49,13 +47,10 @@ public class PanoListActivity extends Activity {
                         }else{
                             mCurrentItem=firstVisibleItem+1;
                         }
-
                         mAdapter.setCurrentItem(mCurrentItem);
                         mAdapter.notifyDataSetChanged();
                     }
-
                 }
-
             }
 
             @Override

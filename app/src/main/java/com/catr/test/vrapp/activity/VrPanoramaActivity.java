@@ -231,22 +231,6 @@ public class VrPanoramaActivity extends Activity {
         super.onConfigurationChanged(newConfig);
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        finish();
-//    }
-//
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-//            finish();
-//            return true;
-//        }else {
-//            return super.onKeyDown(keyCode, event);
-//        }
-//    }
-
     /**
      * Helper class to manage threading.
      */
@@ -259,22 +243,6 @@ public class VrPanoramaActivity extends Activity {
         protected Boolean doInBackground(VrPanoFileInfo... vrPanoFileInfos) {
             InputStream istr = null;
             if (null != vrPanoFileInfos && vrPanoFileInfos.length >= 1) {
-//                if (vrPanoFileInfos[0].getFileUri() == null) {
-//                    AssetManager assetManager = getAssets();
-//                    try {
-//                        istr = assetManager.open(vrPanoFileInfos[0].getFileName());
-//                    } catch (IOException e) {
-//                        Log.e(TAG, "Could not decode default bitmap: " + e);
-//                        return false;
-//                    }
-//                } else {
-//                    try {
-//                        istr = new FileInputStream(new File(vrPanoFileInfos[0].getFileUri()));
-//                    } catch (IOException e) {
-//                        Log.e(TAG, "Could not load file: " + e);
-//                        return false;
-//                    }
-//                }
                 //加载黑屏全景图片时，报android.view.WindowLeaked错，逻辑稍作修改
                 if (Config.versionFlag == Config.SDCARD_VERSION) {
                     if (vrPanoFileInfos[0].getFileUri() != null) {
@@ -381,14 +349,6 @@ public class VrPanoramaActivity extends Activity {
             //显示黑屏（带Logo）
            // loadBlackPano();
             loadNextPano();
-//            //延时一定时间后显示下一张全景照片
-//            mHandler.postDelayed(new Runnable(){
-//                public void run() {
-//                    //显示下一张全景照片
-//                    loadNextPano();
-//                }
-//            }, 2000);
-
         }
     }
 
