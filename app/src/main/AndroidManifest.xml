@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.catr.test.vrapp">
+    package="com.catr.test.vrapp">
 
     <!-- These permissions are used by Google VR SDK to get the best Google VR headset profiles. ! -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -37,7 +37,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activity.LaunchActivity"
-                  android:screenOrientation="portrait">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -45,10 +45,14 @@
                 <category android:name="com.google.intent.category.CARDBOARD"/>
             </intent-filter>
         </activity>
-        <activity android:name=".appintro.AppIntroActivity"/>
-        <activity android:name=".activity.PermissionCheckActivity"/>
-        <activity android:name=".activity.TestActivity"/>
-
+        <activity
+            android:name=".appintro.AppIntroActivity"
+            >
+        </activity>
+        <activity
+            android:name=".activity.PanoListActivity"
+            >
+        </activity>
     </application>
 
 </manifest>
