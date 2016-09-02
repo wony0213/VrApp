@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.catr.test.vrapp.R;
+import com.catr.test.vrapp.activity.PanoListActivity;
 import com.catr.test.vrapp.activity.VrApp;
 import com.catr.test.vrapp.activity.VrPanoramaActivity;
+import com.catr.test.vrapp.adapter.PanoListAdapter;
 
 
 public class AppIntroActivity extends BaseAppIntro{
@@ -33,9 +35,10 @@ public class AppIntroActivity extends BaseAppIntro{
     }
 
     private void startVrPanoActivity() {
-        Intent intent = new Intent(this, VrPanoramaActivity.class);
+        //Intent intent = new Intent(this, VrPanoramaActivity.class);
         //从第一张全景照片开始播放
-        intent.putExtra(VrApp.PANORAMA_NUM, 0);
+       // intent.putExtra(VrApp.PANORAMA_NUM, 0);
+        Intent intent = new Intent(this, PanoListActivity.class);
         startActivity(intent);
         //结束Activity
         finish();

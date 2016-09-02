@@ -12,8 +12,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.catr.test.vrapp.Config;
@@ -84,7 +82,7 @@ public class VrPanoramaActivity extends Activity {
     private MediaUtil mMediaUtil;
 
     //默认使用VR横屏模式
-    private static final int DEFAULT_DISPLAYMODE = VrWidgetView.DisplayMode.FULLSCREEN_STEREO;
+    private static final int DEFAULT_DISPLAYMODE = VrWidgetView.DisplayMode.EMBEDDED;
     private int vrDisplayMode;
 
     //第一个加载的全景图片是否完成。
@@ -431,5 +429,14 @@ public class VrPanoramaActivity extends Activity {
         }
         backgroundImageLoaderTask = new ImageLoaderTask();
         backgroundImageLoaderTask.execute(vrPanoFileInfo);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent();
+        intent.setClass(VrPanoramaActivity.this, PanoListActivity.class);
+        startActivity(intent);
+        VrPanoramaActivity.this.finish();
     }
 }

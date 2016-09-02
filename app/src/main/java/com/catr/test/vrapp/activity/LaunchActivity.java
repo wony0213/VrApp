@@ -57,7 +57,8 @@ public class LaunchActivity extends PermissionCheckActivity {
                                 VrApp.setFirstStart(mContext);
                             } else {
                                 //startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
-                                showBtn();
+                               // showBtn();
+                                startMainActivity();
                             }
                         }
                     });
@@ -67,7 +68,8 @@ public class LaunchActivity extends PermissionCheckActivity {
                         VrApp.setFirstStart(mContext);
                     } else {
                        // startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
-                        showBtn();
+                       // showBtn();
+                        startMainActivity();
                     }
                 }
 
@@ -90,7 +92,7 @@ public class LaunchActivity extends PermissionCheckActivity {
 
     private void startMainActivity() {
         //启动Activity，并finish（）
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, PanoListActivity.class);
         startActivity(intent);
         //结束LaunchActivity
         finish();
