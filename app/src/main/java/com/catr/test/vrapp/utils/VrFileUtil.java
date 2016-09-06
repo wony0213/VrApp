@@ -1,8 +1,7 @@
 package com.catr.test.vrapp.utils;
 
-import android.util.Log;
-
 import com.catr.test.vrapp.Config;
+import com.catr.test.vrapp.model.VrPanoFileInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;

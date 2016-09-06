@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.catr.test.vrapp.R;
-import com.catr.test.vrapp.utils.VrPanoFileInfo;
+import com.catr.test.vrapp.model.VrPanoFileInfo;
 
 import java.util.List;
 

@@ -18,7 +18,7 @@ import com.catr.test.vrapp.Config;
 import com.catr.test.vrapp.R;
 import com.catr.test.vrapp.utils.MediaUtil;
 import com.catr.test.vrapp.utils.VrFileUtil;
-import com.catr.test.vrapp.utils.VrPanoFileInfo;
+import com.catr.test.vrapp.model.VrPanoFileInfo;
 import com.google.vr.sdk.widgets.common.VrWidgetView;
 import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener;
 import com.google.vr.sdk.widgets.pano.VrPanoramaView;

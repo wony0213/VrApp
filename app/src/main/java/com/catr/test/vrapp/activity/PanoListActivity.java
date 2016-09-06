@@ -17,7 +17,7 @@ import com.catr.test.vrapp.adapter.PanoListAdapter;
 public class PanoListActivity extends Activity {
     private ListView mListView;
     private PanoListAdapter mAdapter;
-    private int mCurrentItem ;
+    private int mCurrentItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +39,12 @@ public class PanoListActivity extends Activity {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 int firstVisibleItem = mListView.getFirstVisiblePosition();
-                if(scrollState == SCROLL_STATE_IDLE){
-                    if(null != mListView.getChildAt(0)){
-
-                        if(mListView.getChildAt(0).getTop()>=0){
-                            mCurrentItem=firstVisibleItem;
-                        }else{
-                            mCurrentItem=firstVisibleItem+1;
+                if (scrollState == SCROLL_STATE_IDLE) {
+                    if (null != mListView.getChildAt(0)) {
+                        if (mListView.getChildAt(0).getTop() >= 0) {
+                            mCurrentItem = firstVisibleItem;
+                        } else {
+                            mCurrentItem = firstVisibleItem + 1;
                         }
                         mAdapter.setCurrentItem(mCurrentItem);
                         mAdapter.notifyDataSetChanged();

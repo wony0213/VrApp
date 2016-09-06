@@ -1,4 +1,4 @@
-package com.catr.test.vrapp.utils;
+package com.catr.test.vrapp.model;
 
 import com.google.vr.sdk.widgets.pano.VrPanoramaView;
 import com.google.vr.sdk.widgets.video.VrVideoView;
