@@ -10,6 +10,8 @@ import android.widget.ListView;
 
 import com.catr.test.vrapp.R;
 import com.catr.test.vrapp.adapter.PanoListAdapter;
+import com.catr.test.vrapp.model.SceneryInfo;
+import com.catr.test.vrapp.utils.SceneryInfoUtil;
 
 /**
  * Created by 1 on 2016/8/31.
@@ -24,7 +26,7 @@ public class PanoListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_listview);
         mListView = (ListView) findViewById(R.id.video_lv);
-        mAdapter = new PanoListAdapter(this);
+        mAdapter = new PanoListAdapter(this, SceneryInfoUtil.getSceneryInfos());
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

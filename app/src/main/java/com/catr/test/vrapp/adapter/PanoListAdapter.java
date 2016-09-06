@@ -3,7 +3,9 @@ package com.catr.test.vrapp.adapter;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Picture;
 import android.os.AsyncTask;
+import android.transition.Scene;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.catr.test.vrapp.R;
+import com.catr.test.vrapp.model.SceneryInfo;
+import com.catr.test.vrapp.model.VrPanoFileInfo;
+import com.catr.test.vrapp.utils.SceneryInfoUtil;
 import com.google.vr.sdk.widgets.pano.VrPanoramaView;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * Created by 1 on 2016/8/31.
@@ -26,25 +32,22 @@ public class PanoListAdapter extends BaseAdapter {
     private int mCurrentItem = 0;
     final int TYPE_1 = 0;
     final int TYPE_2 = 1;
-    private String[] mPlaceName = {"故宫", "九寨沟", "卡帕热气球", "白宫", "白金汉宫", "威尼斯水城", "城山日出峰", "富士山"};
-    private String[] mCountry = {"中国", "中国", "土耳其", "美国", "英国", "意大利", "韩国", "日本"};
-    private String[] mCity = {"北京", "四川", "卡帕多西亚", "哥伦比亚特区", "伦敦", "威尼斯", "济州特别自治道", "静冈"};
-    private int[] mImgs = {R.drawable.gugong, R.drawable.jiuzhaigou, R.drawable.kapareqiqiu, R.drawable.baigong, R.drawable.baijinhan, R.drawable.weinisi, R.drawable.chengshanrichufeng, R.drawable.fushishan};
-    private String[] mPanoImgs = {"caict-mono-1.jpg", "lab_ten_floor-mono-2.jpg", "first_floor_moniwangshiyanshiB-mono-3.jpg", "third_floor_apkudoshiyanshi-mono-4.jpg", "third_floor_zidonghuaceshishiyanshiA-mono-5.jpg", "third_floor_jixieshoushiyanshi-mono-6.jpg", "ten_floor_jixieshoushiyanshi-mono-7.jpg", "waijingzhulou-mono-1.jpg"};
-    InputStream istr = null;
 
-    public PanoListAdapter(Context context) {
-        mContext = context;
+    private List<SceneryInfo> mSceneryInfos;
+
+    public PanoListAdapter(Context context, List<SceneryInfo> sceneryInfos) {
+        this.mContext = context;
+        this.mSceneryInfos = sceneryInfos;
     }
 
     @Override
     public int getCount() {
-        return mPlaceName.length;
+        return mSceneryInfos.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return position;
+        return mSceneryInfos.get(position);
     }
 
     @Override
@@ -85,22 +88,23 @@ public class PanoListAdapter extends BaseAdapter {
                 viewHolder2 = (ViewHolder2) convertView.getTag();
             }
         }
+        SceneryInfo sceneryInfo = (SceneryInfo) getItem(position);
         if (type == TYPE_1) {
-            viewHolder1.mPlaceNameTv1.setText(mPlaceName[position]);
-            viewHolder1.mCountryTv1.setText(mCountry[position]);
-            viewHolder1.mCity1.setText(mCity[position]);
-            viewHolder1.mImgView.setBackgroundResource(mImgs[position]);
+            viewHolder1.mPlaceNameTv1.setText(sceneryInfo.getSceneryName());
+            viewHolder1.mCountryTv1.setText(sceneryInfo.getCountry());
+            viewHolder1.mCity1.setText(sceneryInfo.getCity());
+            viewHolder1.mImgView.setBackgroundResource(sceneryInfo.getPicResId());
         } else if (type == TYPE_2) {
-            viewHolder2.mPlaceNameTv2.setText(mPlaceName[position]);
-            viewHolder2.mCountryTv2.setText(mCountry[position]);
-            viewHolder2.mCity2.setText(mCity[position]);
+            viewHolder2.mPlaceNameTv2.setText(sceneryInfo.getSceneryName());
+            viewHolder2.mCountryTv2.setText(sceneryInfo.getCountry());
+            viewHolder2.mCity2.setText(sceneryInfo.getCity());
             viewHolder2.mTempImgView.setVisibility(View.VISIBLE);
-            viewHolder2.mTempImgView.setBackgroundResource(mImgs[position]);
+            viewHolder2.mTempImgView.setBackgroundResource(sceneryInfo.getPicResId());
             viewHolder2.mPanoView.setVisibility(View.GONE);
             viewHolder2.mPanoView.setInfoButtonEnabled(false);
             viewHolder2.mPanoView.setFullscreenButtonEnabled(false);
             viewHolder2.mPanoView.setStereoModeButtonEnabled(false);
-            PanoViewLoaderTask mPanoViewLoaderTask = new PanoViewLoaderTask(mContext, viewHolder2.mPanoView, viewHolder2.mTempImgView, mPanoImgs[position]);
+            PanoViewLoaderTask mPanoViewLoaderTask = new PanoViewLoaderTask(mContext, viewHolder2.mPanoView, viewHolder2.mTempImgView, sceneryInfo.getPanoName());
             mPanoViewLoaderTask.execute();
         }
 
