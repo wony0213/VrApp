@@ -93,6 +93,9 @@ public class VrPanoramaActivity extends Activity {
     //显示黑屏标志位
     private boolean isShowBlackPano = false;
 
+    //照片切换中标志，防止响应多次点击
+    private boolean isPanoSwitching = false;
+
     //
     Handler mHandler;
 
@@ -301,6 +304,9 @@ public class VrPanoramaActivity extends Activity {
                 mMediaUtil.stop();
             }
 
+            //全景照片切换结束
+            isPanoSwitching = false;
+
 //            if (isShowBlackPano) {
 //                //延时一定时间后显示下一张全景照片
 //                mHandler.postDelayed(new Runnable() {
@@ -338,12 +344,17 @@ public class VrPanoramaActivity extends Activity {
             Log.i(TAG, "ActivityEventListener onClick()");
             super.onClick();
 
-            //震动
-            vibrator.vibrate(50);
+            if (!isPanoSwitching) {
+                //全景照片开始切换
+                isPanoSwitching = true;
 
-            //显示黑屏（带Logo）
-           // loadBlackPano();
-            loadNextPano();
+                //震动
+                vibrator.vibrate(50);
+
+                //显示黑屏（带Logo）
+                // loadBlackPano();
+                loadNextPano();
+            }
         }
     }
 

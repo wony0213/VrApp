@@ -30,8 +30,9 @@ public class MediaUtil {
         this.mediaResId = mediaResId;
         this.mediaPath = mediaPath;
 
-        //首先暂停音乐！
-//        this.stop();
+        //停止音乐，并释放MediaPlayer
+        this.stop();
+        this.release();
 
         if (Config.versionFlag == Config.SDCARD_VERSION && null != mediaPath) {
             mediaPlayer = MediaPlayer.create(mContext, Uri.parse("file://" + mediaPath));
