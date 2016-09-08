@@ -163,7 +163,7 @@ public class VrPanoramaActivity extends Activity {
 
 
             mMediaUtil = new MediaUtil();
-            mMediaUtil.load(mContext, vrPanoFileInfo.getSoundName(), vrPanoFileInfo.getSoundUri());
+            mMediaUtil.load(mContext, vrPanoFileInfo.getSoundResId(), vrPanoFileInfo.getSoundUri());
 
             // Load the bitmap in a background thread to avoid blocking the UI thread. This operation can
             // take 100s of milliseconds.
@@ -351,7 +351,7 @@ public class VrPanoramaActivity extends Activity {
     private void loadBlackPano() {
         //设置显示黑屏标志位
         isShowBlackPano = true;
-        mMediaUtil.load(mContext, blackPanoFileInfo.getSoundName(), blackPanoFileInfo.getSoundUri());
+        mMediaUtil.load(mContext, blackPanoFileInfo.getSoundResId(), blackPanoFileInfo.getSoundUri());
         if (backgroundImageLoaderTask != null) {
             // Cancel any task from a previous intent sent to this activity.
             backgroundImageLoaderTask.cancel(true);
@@ -374,7 +374,7 @@ public class VrPanoramaActivity extends Activity {
 //        panoTile.setText(vrPanoFileInfo.getFileName());
 //        panoDescription.setText(vrPanoFileInfo.getFileName());
 
-        mMediaUtil.load(mContext, vrPanoFileInfo.getSoundName(), vrPanoFileInfo.getSoundUri());
+        mMediaUtil.load(mContext, vrPanoFileInfo.getSoundResId(), vrPanoFileInfo.getSoundUri());
 
         // Load the bitmap in a background thread to avoid blocking the UI thread. This operation can
         // take 100s of milliseconds.

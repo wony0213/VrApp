@@ -19,32 +19,15 @@ public class MediaUtil {
     private static final int STATUS_PAUSED = 2;
     private int mStatus = STATUS_STOPED;
 
-    //temp
-    private static Map<String, Integer> mediaResMap;
-
-    static {
-        mediaResMap = new HashMap<>();
-//        mediaResMap.put("caict.mp3", R.raw.caict);
-//        mediaResMap.put("lab_ten_floor.mp3", R.raw.lab_ten_floor);
-//        mediaResMap.put("lab_three_floor.mp3", R.raw.lab_three_floor);
-        mediaResMap.put("audio001.mp3", R.raw.audio001);
-        mediaResMap.put("audio002.mp3", R.raw.audio002);
-        mediaResMap.put("audio003.mp3", R.raw.audio003);
-        mediaResMap.put("audio004.mp3", R.raw.audio004);
-        mediaResMap.put("audio005.mp3", R.raw.audio005);
-        mediaResMap.put("audio006.mp3", R.raw.audio006);
-        mediaResMap.put("audio007.mp3", R.raw.audio007);
-    }
-
     private Context mContext;
-    private String mediaName;
+    private Integer mediaResId;
     private String mediaPath;
     private MediaPlayer mediaPlayer = null;
 
 
-    public void load(Context context, String mediaName, String mediaPath) {
+    public void load(Context context, Integer mediaResId, String mediaPath) {
         this.mContext = context;
-        this.mediaName = mediaName;
+        this.mediaResId = mediaResId;
         this.mediaPath = mediaPath;
 
         //首先暂停音乐！
@@ -52,8 +35,8 @@ public class MediaUtil {
 
         if (Config.versionFlag == Config.SDCARD_VERSION && null != mediaPath) {
             mediaPlayer = MediaPlayer.create(mContext, Uri.parse("file://" + mediaPath));
-        } else if (Config.versionFlag == Config.ASSETS_VERSION && null != mediaName && mediaName != "") {
-            mediaPlayer = MediaPlayer.create(mContext, mediaResMap.get(mediaName).intValue());
+        } else if (Config.versionFlag == Config.ASSETS_VERSION && null != mediaResId) {
+            mediaPlayer = MediaPlayer.create(mContext, mediaResId.intValue());
         } else {
             mediaPlayer = null;
         }
@@ -73,7 +56,7 @@ public class MediaUtil {
                 if (null != mediaPath) {
                     mediaPlayer = MediaPlayer.create(mContext, Uri.parse("file://" + mediaPath));
                 } else {
-                    mediaPlayer = MediaPlayer.create(mContext, mediaResMap.get(mediaName).intValue());
+                    mediaPlayer = MediaPlayer.create(mContext, mediaResId.intValue());
                 }
                 mediaPlayer.start();
                 break;

@@ -14,6 +14,7 @@ public class VrPanoFileInfo{
     private String fileUri;
     private String soundName;
     private String soundUri;
+    private Integer soundResId;
     private int inputType;
     private VrPanoramaView.Options panoOptions = null;
     private int order;
@@ -23,11 +24,12 @@ public class VrPanoFileInfo{
         panoOptions.inputType = VrPanoramaView.Options.TYPE_MONO;
     }
 
-    public VrPanoFileInfo(String fileName, String fileTitle, String fileUri, String soundName, String soundUri, int inputType) {
+    public VrPanoFileInfo(String fileName, String fileTitle, String fileUri, String soundName, Integer soundResId, String soundUri, int inputType) {
         this.fileName = fileName;
         this.fileTitle = fileTitle;
         this.fileUri = fileUri;
         this.soundName = soundName;
+        this.soundResId = soundResId;
         this.soundUri = soundUri;
         this.inputType = inputType;
 
@@ -61,6 +63,10 @@ public class VrPanoFileInfo{
         return soundName;
     }
 
+    public Integer getSoundResId() {
+        return soundResId;
+    }
+
     public String getSoundUri() {
         return soundUri;
     }
@@ -91,6 +97,10 @@ public class VrPanoFileInfo{
 
     public void setSoundName(String soundName) {
         this.soundName = soundName;
+    }
+
+    public void setSoundResId(Integer soundResId) {
+        this.soundResId = soundResId;
     }
 
     public void setSoundUri(String soundUri) {
