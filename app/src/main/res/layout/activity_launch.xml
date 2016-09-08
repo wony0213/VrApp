@@ -17,13 +17,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/cardboard_btn"/>
+            android:background="@drawable/cardboard_btn_selector"/>
         <Button
             android:id="@+id/mono_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/fullscreen_btn"/>
+            android:background="@drawable/mono_btn_selector"/>
     </LinearLayout>
 
 </LinearLayout>
