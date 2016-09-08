@@ -25,6 +25,9 @@ public class LaunchActivity extends PermissionCheckActivity {
     private LinearLayout btn_layout;
     private Button cardboardBtn, monoBtn;
 
+    //按钮点击标志位，防止重复点击
+    private boolean isButtonClicked = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +55,14 @@ public class LaunchActivity extends PermissionCheckActivity {
                                 startAppIntro();
                                 VrApp.setFirstStart(mContext);
                             } else {
-//                                startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
-//                                showBtn();
-                                startPanoListActivity();
+                                //显示MONO和CardBoard按钮
+                                showBtn();
+
+                                //启动全景照片展示Activity
+                                //startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
+
+                                //启动列表Activity
+                                //startPanoListActivity();
                             }
                         }
                     });
@@ -63,9 +71,14 @@ public class LaunchActivity extends PermissionCheckActivity {
                         startAppIntro();
                         VrApp.setFirstStart(mContext);
                     } else {
-//                        startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
-//                        showBtn();
-                        startPanoListActivity();
+                        //显示MONO和CardBoard按钮
+                        showBtn();
+
+                        //启动全景照片展示Activity
+                        //startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
+
+                        //启动列表Activity
+                        //startPanoListActivity();
                     }
                 }
 
@@ -115,19 +128,53 @@ public class LaunchActivity extends PermissionCheckActivity {
 
     private void showBtn() {
         btn_layout = (LinearLayout) findViewById(R.id.btn_layout);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0.3f, 1.0f);
+        alphaAnimation.setDuration(500);
+        btn_layout.startAnimation(alphaAnimation);
         btn_layout.setVisibility(View.VISIBLE);
-        cardboardBtn = (Button) findViewById(R.id.cardboard_btn);
-        monoBtn = (Button) findViewById(R.id.mono_btn);
-        cardboardBtn.setOnClickListener(new View.OnClickListener() {
+
+        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onClick(View v) {
-                startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
+            public void onAnimationStart(Animation animation) {
+
             }
-        });
-        monoBtn.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
-                startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_MONO);
+            public void onAnimationEnd(Animation animation) {
+                cardboardBtn = (Button) findViewById(R.id.cardboard_btn);
+                monoBtn = (Button) findViewById(R.id.mono_btn);
+                cardboardBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //设置点击事件只触发一次,防止出现声音重复问题
+                        //因为“异步”的原因setEnable（false）和setClickable（false）的方式不行
+                        //cardboardBtn.setEnabled(false);
+                        //monoBtn.setEnabled(false);
+                        if (!isButtonClicked) {
+                            isButtonClicked = true;
+                            startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
+                        }
+
+                    }
+                });
+                monoBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //设置点击事件只触发一次,防止出现声音重复问题
+                        //因为“异步”的原因setEnable（false）和setClickable（false）的方式不行
+                        //cardboardBtn.setEnabled(false);
+                        //monoBtn.setEnabled(false);
+                        if (!isButtonClicked) {
+                            isButtonClicked = true;
+                            startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
             }
         });
     }

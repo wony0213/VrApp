@@ -110,14 +110,6 @@ public class VrPanoramaActivity extends Activity {
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new ActivityEventListener());
 
-//        panoWidgetView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(mContext, "panoWidgetView OnClick", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
         Intent intent = getIntent();
         vrDisplayMode=intent.getIntExtra(VrApp.DISPLAY_MODE,DEFAULT_DISPLAYMODE);
         //默认使用VR横屏模式
@@ -389,14 +381,5 @@ public class VrPanoramaActivity extends Activity {
         }
         backgroundImageLoaderTask = new ImageLoaderTask();
         backgroundImageLoaderTask.execute(vrPanoFileInfo);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent();
-        intent.setClass(VrPanoramaActivity.this, PanoListActivity.class);
-        startActivity(intent);
-        VrPanoramaActivity.this.finish();
     }
 }
