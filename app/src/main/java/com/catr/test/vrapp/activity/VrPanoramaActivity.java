@@ -115,6 +115,9 @@ public class VrPanoramaActivity extends Activity {
         //默认使用VR横屏模式
         panoWidgetView.setDisplayMode(vrDisplayMode);
 
+        //去除info按钮
+        panoWidgetView.setInfoButtonEnabled(false);
+
 //        panoTile = (TextView) findViewById(R.id.tv_title);
 //        panoDescription = (TextView) findViewById(R.id.tv_description);
 
