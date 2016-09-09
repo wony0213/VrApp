@@ -15,7 +15,7 @@ import java.util.List;
 public class VrFileUtil {
     private static final String TAG = "VrFileUtil";
 
-    private static String[] fileNames = {"yjyjm-mono-010.jpg", "3gdlwg-mono-020.jpg", "3gdl1c-mono-030.jpg", "8cyzxsys-mono-050.jpg", "10cmnwsys-mono-060.jpg", "dbasw-mono-070.jpg", "smfdbas-mono-080.jpg", "stxqdbas-mono-090.jpg", "mimoota-mono-100.jpg", "dttotasys-mono-110.jpg", "wifilmyzsys-mono-120.jpg", "dcfssys-mono-130.jpg", "sarcss-mono-140.jpg", "xys-mono-150.jpg", "ydrjyzsys-mono-160.jpg", "xpcs-mono-170.jpg.jpg"};
+    private static String[] fileNames = {"yjyjm-mono-010.jpg", "3gdlwg-mono-020.jpg", "3gdl1c-mono-030.jpg", "8cyzxsys-mono-050.jpg", "10cmnwsys-mono-060.jpg", "dbasw-mono-070.jpg", "smfdbas-mono-080.jpg", "stxqdbas-mono-090.jpg", "mimoota-mono-100.jpg", "dttotasys-mono-110.jpg", "wifilmyzsys-mono-120.jpg", "dcfssys-mono-130.jpg", "sarcss-mono-140.jpg", "xys-mono-150.jpg", "ydrjyzsys-mono-160.jpg", "xpcs-mono-170.jpg"};
     private static String[] fileTitles = {"01 研究院进门", "02 3G大楼外观", "03 3G大楼一层", "05 8层一致性实验室", "06 10层模拟实验网", "07 电波暗室外", "08 十米法电波暗室", "09 双天线全电波暗室", "10 MIMO OTA", "11 多探头 OTA暗室", "12 Wi-Fi联盟验证实验室", "13 电磁辐射生化实验室", "14 SAR测试", "15 消音室", "16 移动软件验证实验室", "17 芯片测试"};
     private static String[] soundNames = {"yjyjm.m4a", "3gdlwg.m4a", "3gdl1c.m4a", "8cyzxsys.m4a", "10cmnwsys.m4a", "dbasw.m4a", "smfdbas.m4a", "stxqdbas.m4a", "mimoota.m4a", "dttotasys.m4a", "wifilmyzsys.m4a", "dcfssys.m4a", "sarcss.m4a", "xys.m4a", "ydrjyzsys.m4a", "xpcs.m4a"};
 
@@ -80,22 +80,22 @@ public class VrFileUtil {
                 vrPanoFileInfos.add(new VrPanoFileInfo(fileNames[i], fileTitles[i], null, soundNames[i], soundResIds[i], null, VrPanoFileInfo.INPUT_TYPE_MONO));
             }
 
-//            vrPanoFileInfos.add(new VrPanoFileInfo("yjyjm-mono-010.jpg", "01 研究院进门", null, "yjyjm.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("3gdlwg-mono-020.jpg", "02 3G大楼外观", null, "3gdlwg.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("3gdl1c-mono-030.jpg", "03 3G大楼一层", null, "3gdl1c.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("8cyzxsys-mono-050.jpg", "05 8层一致性实验室", null, "8cyzxsys.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("10cmnwsys-mono-060.jpg", "06 10层模拟实验网", null, "10cmnwsys.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("dbasw-mono-070.jpg", "07 电波暗室外", null, "dbasw.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("smfdbas-mono-080.jpg", "08 十米法电波暗室", null, "smfdbas.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("stxqdbas-mono-090.jpg", "09 双天线全电波暗室", null, "stxqdbas.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("mimoota-mono-100.jpg", "10 MIMO OTA", null, "mimoota.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("dttotasys-mono-110.jpg", "11 多探头 OTA暗室", null, "dttotasys.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("wifilmyzsys-mono-120.jpg", "12 Wi-Fi联盟验证实验室", null, "wifilmyzsys.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("dcfssys-mono-130.jpg", "13 电磁辐射生化实验室", null, "dcfssys.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("sarcss-mono-140.jpg", "14 SAR测试", null, "sarcss.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("xys-mono-150.jpg", "15 消音室", null, "xys.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("ydrjyzsys-mono-160.jpg", "16 移动软件验证实验室", null, "ydrjyzsys.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
-//            vrPanoFileInfos.add(new VrPanoFileInfo("xpcs-mono-170.jpg.jpg", "17 芯片测试", null, "xpcs.m4a", null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("yjyjm-mono-010.jpg", "01 研究院进门", null, "yjyjm.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("3gdlwg-mono-020.jpg", "02 3G大楼外观", null, "3gdlwg.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("3gdl1c-mono-030.jpg", "03 3G大楼一层", null, "3gdl1c.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("8cyzxsys-mono-050.jpg", "05 8层一致性实验室", null, "8cyzxsys.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("10cmnwsys-mono-060.jpg", "06 10层模拟实验网", null, "10cmnwsys.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("dbasw-mono-070.jpg", "07 电波暗室外", null, "dbasw.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("smfdbas-mono-080.jpg", "08 十米法电波暗室", null, "smfdbas.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("stxqdbas-mono-090.jpg", "09 双天线全电波暗室", null, "stxqdbas.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("mimoota-mono-100.jpg", "10 MIMO OTA", null, "mimoota.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("dttotasys-mono-110.jpg", "11 多探头 OTA暗室", null, "dttotasys.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("wifilmyzsys-mono-120.jpg", "12 Wi-Fi联盟验证实验室", null, "wifilmyzsys.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("dcfssys-mono-130.jpg", "13 电磁辐射生化实验室", null, "dcfssys.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("sarcss-mono-140.jpg", "14 SAR测试", null, "sarcss.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("xys-mono-150.jpg", "15 消音室", null, "xys.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("ydrjyzsys-mono-160.jpg", "16 移动软件验证实验室", null, "ydrjyzsys.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
+//            vrPanoFileInfos.add(new VrPanoFileInfo("xpcs-mono-170.jpg", "17 芯片测试", null, "xpcs.m4a", null, null, VrPanoFileInfo.INPUT_TYPE_MONO));
 
             return vrPanoFileInfos;
         }
