@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.catr.test.vrapp.Config;
@@ -75,6 +77,8 @@ public class VrPanoramaActivity extends Activity {
 //    private TextView panoTile;
 //    private TextView panoDescription;
 
+    private Button playButton;
+
     private Context mContext;
 
     private Vibrator vibrator;
@@ -123,6 +127,15 @@ public class VrPanoramaActivity extends Activity {
 
 //        panoTile = (TextView) findViewById(R.id.tv_title);
 //        panoDescription = (TextView) findViewById(R.id.tv_description);
+
+        playButton = (Button) findViewById(R.id.btn_play);
+
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFirstPanoAndPlay();
+            }
+        });
 
         mContext = this;
 
@@ -344,16 +357,19 @@ public class VrPanoramaActivity extends Activity {
             Log.i(TAG, "ActivityEventListener onClick()");
             super.onClick();
 
-            if (!isPanoSwitching) {
-                //全景照片开始切换
-                isPanoSwitching = true;
+            //仅在全屏模式下相应点击事件
+            if (vrDisplayMode == VrWidgetView.DisplayMode.FULLSCREEN_STEREO || vrDisplayMode == VrWidgetView.DisplayMode.FULLSCREEN_MONO) {
+                if (!isPanoSwitching) {
+                    //全景照片开始切换
+                    isPanoSwitching = true;
 
-                //震动
-                vibrator.vibrate(50);
+                    //震动
+                    vibrator.vibrate(50);
 
-                //显示黑屏（带Logo）
-                // loadBlackPano();
-                loadNextPano();
+                    //显示黑屏（带Logo）
+                    // loadBlackPano();
+                    loadNextPano();
+                }
             }
         }
     }
@@ -385,6 +401,11 @@ public class VrPanoramaActivity extends Activity {
 //        panoTile.setText(vrPanoFileInfo.getFileName());
 //        panoDescription.setText(vrPanoFileInfo.getFileName());
 
+        //如果切换回第一张，则结束播放
+        if (panoramaNum == 0) {
+            panoWidgetView.setDisplayMode(VrWidgetView.DisplayMode.EMBEDDED);
+        }
+
         mMediaUtil.load(mContext, vrPanoFileInfo.getSoundResId(), vrPanoFileInfo.getSoundUri());
 
         // Load the bitmap in a background thread to avoid blocking the UI thread. This operation can
@@ -395,5 +416,34 @@ public class VrPanoramaActivity extends Activity {
         }
         backgroundImageLoaderTask = new ImageLoaderTask();
         backgroundImageLoaderTask.execute(vrPanoFileInfo);
+    }
+
+    //加载第一张全景照片及播放对应音频
+    private void loadFirstPanoAndPlay() {
+        //设置显示黑屏标志位
+        isShowBlackPano = false;
+
+        if (panoramaNum == 0) {
+            //如果panoramaNum为0，则只需要切换DisplayMode即可
+            panoWidgetView.setDisplayMode(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
+        } else {
+            //如果panoramaNum不为0，则需要load第一张全景照片
+            panoramaNum = 0;
+            vrPanoFileInfo = vrPanoFileInfos.get(panoramaNum);
+
+            mMediaUtil.load(mContext, vrPanoFileInfo.getSoundResId(), vrPanoFileInfo.getSoundUri());
+
+            //使用双眼模式
+            panoWidgetView.setDisplayMode(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
+
+            // Load the bitmap in a background thread to avoid blocking the UI thread. This operation can
+            // take 100s of milliseconds.
+            if (backgroundImageLoaderTask != null) {
+                // Cancel any task from a previous intent sent to this activity.
+                backgroundImageLoaderTask.cancel(true);
+            }
+            backgroundImageLoaderTask = new ImageLoaderTask();
+            backgroundImageLoaderTask.execute(vrPanoFileInfo);
+        }
     }
 }
