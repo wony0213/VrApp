@@ -152,7 +152,7 @@ public class LaunchActivity extends PermissionCheckActivity {
                         //monoBtn.setEnabled(false);
                         if (!isButtonClicked) {
                             isButtonClicked = true;
-                            startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_MONO);
+                            startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
                         }
 
                     }
@@ -166,7 +166,7 @@ public class LaunchActivity extends PermissionCheckActivity {
                         //monoBtn.setEnabled(false);
                         if (!isButtonClicked) {
                             isButtonClicked = true;
-                            startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
+                            startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_MONO);
                         }
                     }
                 });

@@ -36,7 +36,7 @@ import java.util.List;
  * adb shell am start -a "android.intent.action.VIEW" \
  * -n "com.google.vr.sdk.samples.simplepanowidget/.SimpleVrPanoramaActivity" \
  * -d "/sdcard/FILENAME.JPG"
- * <p>
+ * <p/>
  * To load stereo images, "--ei inputType 2" can be used to pass in an integer extra which will set
  * VrPanoramaView.Options.inputType.
  */
@@ -114,7 +114,7 @@ public class VrPanoramaActivity extends Activity {
         panoWidgetView.setEventListener(new ActivityEventListener());
 
         Intent intent = getIntent();
-        vrDisplayMode=intent.getIntExtra(VrApp.DISPLAY_MODE,DEFAULT_DISPLAYMODE);
+        vrDisplayMode = intent.getIntExtra(VrApp.DISPLAY_MODE, DEFAULT_DISPLAYMODE);
         //默认使用VR横屏模式
         panoWidgetView.setDisplayMode(vrDisplayMode);
 

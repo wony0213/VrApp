@@ -5,13 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.catr.test.vrapp.R;
-import com.catr.test.vrapp.activity.PanoListActivity;
 import com.catr.test.vrapp.activity.VrApp;
 import com.catr.test.vrapp.activity.VrPanoramaActivity;
-import com.catr.test.vrapp.adapter.PanoListAdapter;
+import com.google.vr.sdk.widgets.common.VrWidgetView;
 
 
-public class AppIntroActivity extends BaseAppIntro{
+public class AppIntroActivity extends BaseAppIntro {
 
     private static final String TAG = "LaunchActivity";
 
@@ -34,13 +33,14 @@ public class AppIntroActivity extends BaseAppIntro{
         finish();
     }
 
-    private void startVrPanoActivity() {
-        //Intent intent = new Intent(this, VrPanoramaActivity.class);
+    private void startVrPanoActivity(int display_mode) {
+        //启动Activity，并finish（）
+        Intent intent = new Intent(this, VrPanoramaActivity.class);
         //从第一张全景照片开始播放
-       // intent.putExtra(VrApp.PANORAMA_NUM, 0);
-        Intent intent = new Intent(this, PanoListActivity.class);
+        intent.putExtra(VrApp.PANORAMA_NUM, 0);
+        intent.putExtra(VrApp.DISPLAY_MODE, display_mode);
         startActivity(intent);
-        //结束Activity
+        //结束LaunchActivity
         finish();
     }
 
@@ -63,7 +63,8 @@ public class AppIntroActivity extends BaseAppIntro{
     public void onSlideChanged() {
 
     }
-    public void getStarted(View v){
-        startVrPanoActivity();
+
+    public void getStarted(View v) {
+        startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
     }
 }
