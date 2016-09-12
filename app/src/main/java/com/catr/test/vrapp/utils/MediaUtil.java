@@ -3,10 +3,12 @@ package com.catr.test.vrapp.utils;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.util.Log;
 
 import com.catr.test.vrapp.Config;
 import com.catr.test.vrapp.R;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,55 +16,42 @@ import java.util.Map;
  * Created by Wony on 2016/7/28.
  */
 public class MediaUtil {
+    private static final String TAG = "MediaUtil";
+
     private static final int STATUS_STOPED = 0;
     private static final int STATUS_PLAYING = 1;
     private static final int STATUS_PAUSED = 2;
-    private int mStatus = STATUS_STOPED;
+    private static int mStatus = STATUS_STOPED;
+    private static boolean isLoaded = false;
 
-    private Context mContext;
-    private Integer mediaResId;
-    private String mediaPath;
-    private MediaPlayer mediaPlayer = null;
+    private static MediaPlayer mediaPlayer = null;
+    private static Context mContext;
+    private static Integer mMediaResId;
+    private static String mMediaPath;
 
 
-    public void load(Context context, Integer mediaResId, String mediaPath) {
-        this.mContext = context;
-        this.mediaResId = mediaResId;
-        this.mediaPath = mediaPath;
+    public static void load(Context context, Integer mediaResId, String mediaPath) {
+        //重新加载音乐前，先确保一直的MediaPlayer stop并release
+        release();
 
-        //停止音乐，并释放MediaPlayer
-        this.stop();
-        this.release();
+        //初始化mMediaResId、mediaPath
+        mContext = context;
+        mMediaResId = mediaResId;
+        mMediaPath = mediaPath;
 
-        if (Config.versionFlag == Config.SDCARD_VERSION && null != mediaPath) {
-            mediaPlayer = MediaPlayer.create(mContext, Uri.parse("file://" + mediaPath));
-        } else if (Config.versionFlag == Config.ASSETS_VERSION && null != mediaResId) {
-            mediaPlayer = MediaPlayer.create(mContext, mediaResId.intValue());
-        } else {
-            mediaPlayer = null;
-        }
+        //
+        isLoaded = true;
     }
 
-    private boolean doPlay() {
+    private static boolean doPlay() {
         switch (mStatus) {
             case STATUS_STOPED:
-                //音乐播放机制未完全搞明白，以下代码会报错
-//                try {
-//                    mediaPlayer.reset();
-//                    mediaPlayer.prepare();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                    return false;
-//                }
-                if (null != mediaPath) {
-                    mediaPlayer = MediaPlayer.create(mContext, Uri.parse("file://" + mediaPath));
-                } else {
-                    mediaPlayer = MediaPlayer.create(mContext, mediaResId.intValue());
-                }
                 mediaPlayer.start();
+                setStatus(STATUS_PLAYING);
                 break;
             case STATUS_PAUSED:
                 mediaPlayer.start();
+                setStatus(STATUS_PLAYING);
                 break;
             case STATUS_PLAYING:
                 break;
@@ -72,55 +61,75 @@ public class MediaUtil {
         return true;
     }
 
-    public boolean play() {
-        if (null != mediaPlayer) {
+    public static boolean play() {
+        initMediaPlayer();
+        if (null != mediaPlayer && isLoaded) {
             return doPlay();
         } else {
             return false;
         }
     }
 
-    private void doStop() {
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.stop();
-            setStatus(STATUS_STOPED);
+    private static void initMediaPlayer() {
+        if (Config.versionFlag == Config.SDCARD_VERSION && null != mMediaPath) {
+            mediaPlayer = MediaPlayer.create(mContext, Uri.parse("file://" + mMediaPath));
+        } else if (Config.versionFlag == Config.ASSETS_VERSION && null != mMediaResId) {
+            mediaPlayer = MediaPlayer.create(mContext, mMediaResId.intValue());
+        } else {
+            mediaPlayer = null;
         }
     }
 
-    public void stop() {
-        if (null != mediaPlayer) {
+    private static void doStop() {
+        switch (mStatus) {
+            case STATUS_STOPED:
+                break;
+            case STATUS_PAUSED:
+                mediaPlayer.stop();
+                setStatus(STATUS_STOPED);
+                break;
+            case STATUS_PLAYING:
+                mediaPlayer.stop();
+                setStatus(STATUS_STOPED);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public static void stop() {
+        if (null != mediaPlayer && isLoaded) {
             doStop();
         }
     }
 
-    private void doPause() {
+    private static void doPause() {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             setStatus(STATUS_PAUSED);
         }
     }
 
-    public void pause() {
-        if (null != mediaPlayer) {
+    public static void pause() {
+        if (null != mediaPlayer && isLoaded) {
             doPause();
         }
     }
 
-    private void doRelease() {
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.stop();
-        }
+    private static void doRelease() {
+        doStop();
         mediaPlayer.release();
         mediaPlayer = null;
+        isLoaded = false;
     }
 
-    public void release() {
-        if (null != mediaPlayer) {
+    public static void release() {
+        if (null != mediaPlayer && isLoaded) {
             doRelease();
         }
     }
 
-    private void setStatus(int status) {
+    private static void setStatus(int status) {
         mStatus = status;
     }
 }

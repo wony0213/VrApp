@@ -178,7 +178,7 @@ public class VrPanoramaActivity extends Activity {
 //            panoDescription.setText(vrPanoFileInfo.getFileName());
 
 
-            mMediaUtil = new MediaUtil();
+//            mMediaUtil = new MediaUtil();
             mMediaUtil.load(mContext, vrPanoFileInfo.getSoundResId(), vrPanoFileInfo.getSoundUri());
 
             // Load the bitmap in a background thread to avoid blocking the UI thread. This operation can
