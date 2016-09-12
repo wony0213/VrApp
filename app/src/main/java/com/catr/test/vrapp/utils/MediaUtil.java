@@ -132,4 +132,10 @@ public class MediaUtil {
     private static void setStatus(int status) {
         mStatus = status;
     }
+
+    public static void setOnCompletionListener(MediaPlayer.OnCompletionListener onCompletionListener) {
+        if (null != mediaPlayer) {
+            mediaPlayer.setOnCompletionListener(onCompletionListener);
+        }
+    }
 }

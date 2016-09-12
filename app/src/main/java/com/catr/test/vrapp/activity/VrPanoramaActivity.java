@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -89,6 +90,18 @@ public class VrPanoramaActivity extends Activity {
     private static final int DEFAULT_DISPLAYMODE = VrWidgetView.DisplayMode.EMBEDDED;
     private int vrDisplayMode;
 
+    //默认使用手动播放模式
+    private static final String AUTO_PLAY_MODE = "auto_play_mode";
+    private static final String MANUAL_PLAY_MODE = "manual_play_mode";
+    private static final String DEFAULT_PLAY_MODE = AUTO_PLAY_MODE;
+    private String playMode;
+
+    //自动播放时间间隔3秒钟
+    private static final int AUTO_PLAY_INTERVAL = 3;
+
+    //
+    private MediaPlayer.OnCompletionListener mOnCompletionListener = null;
+
     //第一个加载的全景图片是否完成。
     private boolean isFirstLoadSuccess = false;
 
@@ -125,6 +138,12 @@ public class VrPanoramaActivity extends Activity {
         //去除info按钮
         panoWidgetView.setInfoButtonEnabled(false);
 
+        //默认使用手动播放模式
+        playMode = intent.getStringExtra(VrApp.PLAY_MODE);
+        if (null == playMode) {
+            playMode = DEFAULT_PLAY_MODE;
+        }
+
 //        panoTile = (TextView) findViewById(R.id.tv_title);
 //        panoDescription = (TextView) findViewById(R.id.tv_description);
 
@@ -144,6 +163,22 @@ public class VrPanoramaActivity extends Activity {
         blackPanoFileInfo = VrFileUtil.getBlackPanoFileInfo();
 
         mHandler = new Handler();
+
+        //初始化mOnCompletionListener
+        if (playMode == AUTO_PLAY_MODE) {
+            mOnCompletionListener = new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadNextPano();
+                        }
+                    }, AUTO_PLAY_INTERVAL * 1000);
+
+                }
+            };
+        }
 
         // Initial launch of the app or an Activity recreation due to rotation.
         handleIntent(getIntent());
@@ -214,6 +249,10 @@ public class VrPanoramaActivity extends Activity {
             if (vrDisplayMode == VrWidgetView.DisplayMode.FULLSCREEN_STEREO || vrDisplayMode == VrWidgetView.DisplayMode.FULLSCREEN_MONO) {
                 Log.i(TAG, "VrPanoramaActivity onResume()    " + "vrDisplayMode=" + vrDisplayMode + "    mMediaUtil.play()");
                 boolean playSucceed = mMediaUtil.play();
+                //设置自动播放
+                if (playMode == AUTO_PLAY_MODE) {
+                    mMediaUtil.setOnCompletionListener(mOnCompletionListener);
+                }
                 if (!playSucceed) {
                     Log.i(TAG, "VrPanoramaActivity onResume()" + "音乐播放失败");
                 }
@@ -309,6 +348,10 @@ public class VrPanoramaActivity extends Activity {
             if (vrDisplayMode == VrWidgetView.DisplayMode.FULLSCREEN_MONO || vrDisplayMode == VrWidgetView.DisplayMode.FULLSCREEN_STEREO) {
                 Log.i(TAG, "ActivityEventListener onLoadSuccess()    " + "vrDisplayMode=" + vrDisplayMode + "    mMediaUtil.play()");
                 boolean playSucceed = mMediaUtil.play();
+                //设置自动播放
+                if (playMode == AUTO_PLAY_MODE) {
+                    mMediaUtil.setOnCompletionListener(mOnCompletionListener);
+                }
                 if (!playSucceed) {
                     Log.i(TAG, "ActivityEventListener onLoadSuccess()" + "音乐播放失败");
                 }

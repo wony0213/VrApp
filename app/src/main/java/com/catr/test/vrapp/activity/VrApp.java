@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 public class VrApp extends Application {
     public static final String PANORAMA_NUM = "panorama_num";
     public static final String DISPLAY_MODE = "display_mode";
+    public static final String PLAY_MODE = "play_mode";
     @Override
     public void onCreate() {
         super.onCreate();
