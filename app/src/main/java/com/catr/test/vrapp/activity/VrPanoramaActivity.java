@@ -163,8 +163,6 @@ public class VrPanoramaActivity extends Activity {
         mDetailTextView = (TextView) findViewById(R.id.detail_text);
         mTurnOverImageView = (ImageView) findViewById(R.id.turn_over_icon);
 
-        mDetailTextView.setText(R.string.paragraph1);
-
         mDetailTextView.setHeight(mDetailTextView.getLineHeight() * MAX_TEXTVIEW_LINE_NUM);  //设置默认显示高度
 
         // 根据高度来控制是否展示翻转icon
