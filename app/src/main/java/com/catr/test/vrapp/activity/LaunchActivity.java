@@ -57,12 +57,6 @@ public class LaunchActivity extends PermissionCheckActivity {
                             } else {
                                 //显示MONO和CardBoard按钮
                                 showBtn();
-
-                                //启动全景照片展示Activity
-                                //startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
-
-                                //启动列表Activity
-                                //startPanoListActivity();
                             }
                         }
                     });
@@ -71,14 +65,11 @@ public class LaunchActivity extends PermissionCheckActivity {
                         startAppIntro();
                         VrApp.setFirstStart(mContext);
                     } else {
+
                         //显示MONO和CardBoard按钮
                         showBtn();
 
-                        //启动全景照片展示Activity
-                        //startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
 
-                        //启动列表Activity
-                        //startPanoListActivity();
                     }
                 }
 
