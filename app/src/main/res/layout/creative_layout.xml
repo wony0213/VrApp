@@ -75,11 +75,13 @@
             android:padding="20dip">
 
             <ImageView
+                android:id="@+id/img_qr_weibo"
                 android:layout_width="150dip"
                 android:layout_height="150dip"
                 android:background="@drawable/qr_code_weibo"/>
 
             <ImageView
+                android:id="@+id/img_qr_weixin"
                 android:layout_marginLeft="20dip"
                 android:layout_width="150dip"
                 android:layout_height="150dip"

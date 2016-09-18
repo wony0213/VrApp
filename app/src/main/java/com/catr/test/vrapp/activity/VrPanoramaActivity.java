@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,10 +17,12 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.catr.test.vrapp.Config;
 import com.catr.test.vrapp.R;
+import com.catr.test.vrapp.qrcode.QrCodeUtils;
 import com.catr.test.vrapp.utils.MediaUtil;
 import com.catr.test.vrapp.utils.VrFileUtil;
 import com.catr.test.vrapp.model.VrPanoFileInfo;
@@ -116,6 +120,10 @@ public class VrPanoramaActivity extends Activity {
     //
     Handler mHandler;
 
+    //二维码图片
+    ImageView qrCodeWeiboImageview;
+    ImageView qrCodeWeixinImageview;
+
     /**
      * Called when the app is launched via the app icon or an intent using the adb command above. This
      * initializes the app and loads the image to render.
@@ -123,6 +131,8 @@ public class VrPanoramaActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "VrPanoramaActivity onCreate()");
+
+        mContext = this;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.creative_layout);
@@ -156,7 +166,50 @@ public class VrPanoramaActivity extends Activity {
             }
         });
 
-        mContext = this;
+        qrCodeWeiboImageview = (ImageView) findViewById(R.id.img_qr_weibo);
+
+        qrCodeWeiboImageview.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) qrCodeWeiboImageview.getBackground();
+                QrCodeUtils.analyzeBitmap(bitmapDrawable.getBitmap(), new QrCodeUtils.AnalyzeCallback() {
+                    @Override
+                    public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
+                        Toast.makeText(mContext, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                        Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result));
+                        mContext.startActivity(mIntent);
+                    }
+
+                    @Override
+                    public void onAnalyzeFailed() {
+                        Toast.makeText(mContext, "解析二维码失败", Toast.LENGTH_LONG).show();
+                    }
+                });
+                return true;
+            }
+        });
+
+        qrCodeWeixinImageview = (ImageView) findViewById(R.id.img_qr_weixin);
+
+        qrCodeWeixinImageview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) qrCodeWeixinImageview.getBackground();
+                QrCodeUtils.analyzeBitmap(bitmapDrawable.getBitmap(), new QrCodeUtils.AnalyzeCallback() {
+                    @Override
+                    public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
+                        Toast.makeText(mContext, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                        Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result));
+                        mContext.startActivity(mIntent);
+                    }
+
+                    @Override
+                    public void onAnalyzeFailed() {
+                        Toast.makeText(mContext, "解析二维码失败", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 

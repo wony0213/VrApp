@@ -65,11 +65,8 @@ public class LaunchActivity extends PermissionCheckActivity {
                         startAppIntro();
                         VrApp.setFirstStart(mContext);
                     } else {
-
                         //显示MONO和CardBoard按钮
                         showBtn();
-
-
                     }
                 }
 
@@ -145,7 +142,6 @@ public class LaunchActivity extends PermissionCheckActivity {
                             isButtonClicked = true;
                             startVrPanoActivity(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
                         }
-
                     }
                 });
                 monoBtn.setOnClickListener(new View.OnClickListener() {

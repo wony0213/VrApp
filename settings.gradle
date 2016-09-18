@@ -1,1 +1,1 @@
-include ':app', ':lib-base', ':lib-common', ':lib-commonwidget', ':lib-panowidget', ':lib-videowidget', ':appintro'
+include ':app', ':lib-base', ':lib-common', ':lib-commonwidget', ':lib-panowidget', ':lib-videowidget', ':appintro', ':zxing-core-3.2.1'

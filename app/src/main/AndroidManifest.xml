@@ -23,20 +23,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
 
-        <!-- android:theme="@android:style/Theme.Holo.Light" -->
-        <!-- android:theme="@style/AppTheme" -->
-
-        <activity
-            android:name=".activity.MainActivity">
-
-        </activity>
         <!--add by glf
         添加android:exported="true",才能使用命令行打开-->
         <activity
             android:name=".activity.VrPanoramaActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.DetailActivity"
+        <activity android:name=".activity.LaunchActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -45,12 +38,11 @@
                 <category android:name="com.google.intent.category.CARDBOARD"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".appintro.AppIntroActivity"
-            >
-        </activity>
+
+        <activity android:name=".appintro.AppIntroActivity"/>
+        <activity android:name=".activity.MainActivity"/>
         <activity android:name=".activity.PanoListActivity"/>
-        <activity android:name=".activity.LaunchActivity"/>
+        <activity android:name=".activity.DetailActivity"/>
     </application>
 
 </manifest>
