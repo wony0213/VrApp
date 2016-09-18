@@ -36,7 +36,7 @@
             android:name=".activity.VrPanoramaActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.LaunchActivity"
+        <activity android:name=".activity.DetailActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -49,10 +49,8 @@
             android:name=".appintro.AppIntroActivity"
             >
         </activity>
-        <activity
-            android:name=".activity.PanoListActivity"
-            >
-        </activity>
+        <activity android:name=".activity.PanoListActivity"/>
+        <activity android:name=".activity.LaunchActivity"/>
     </application>
 
 </manifest>
