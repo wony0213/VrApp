@@ -16,8 +16,12 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.catr.test.vrapp.Config;
@@ -79,9 +83,6 @@ public class VrPanoramaActivity extends Activity {
     private VrPanoFileInfo vrPanoFileInfo;
     private int panoramaNum = 0;
 
-//    private TextView panoTile;
-//    private TextView panoDescription;
-
     private Button playButton;
 
     private Context mContext;
@@ -124,6 +125,10 @@ public class VrPanoramaActivity extends Activity {
     ImageView qrCodeWeiboImageview;
     ImageView qrCodeWeixinImageview;
 
+    private TextView mDetailTextView;   //文本域
+    private ImageView mTurnOverImageView;  //翻转icon
+    private static final int MAX_TEXTVIEW_LINE_NUM = 3;  //TextView设置默认最大展示行数为3
+
     /**
      * Called when the app is launched via the app icon or an intent using the adb command above. This
      * initializes the app and loads the image to render.
@@ -135,7 +140,8 @@ public class VrPanoramaActivity extends Activity {
         mContext = this;
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.creative_layout);
+        setContentView(R.layout.detail_layout);
+//        setContentView(R.layout.detail_layout_temp);
 
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new ActivityEventListener());
@@ -154,8 +160,22 @@ public class VrPanoramaActivity extends Activity {
             playMode = DEFAULT_PLAY_MODE;
         }
 
-//        panoTile = (TextView) findViewById(R.id.tv_title);
-//        panoDescription = (TextView) findViewById(R.id.tv_description);
+        mDetailTextView = (TextView) findViewById(R.id.detail_text);
+        mTurnOverImageView = (ImageView) findViewById(R.id.turn_over_icon);
+
+        mDetailTextView.setText(R.string.paragraph1);
+
+        mDetailTextView.setHeight(mDetailTextView.getLineHeight() * MAX_TEXTVIEW_LINE_NUM);  //设置默认显示高度
+
+        // 根据高度来控制是否展示翻转icon
+        mDetailTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                mTurnOverImageView.setVisibility(mDetailTextView.getLineCount() > MAX_TEXTVIEW_LINE_NUM ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        mTurnOverImageView.setOnClickListener(new MyTurnListener());  //翻转监听
 
         playButton = (Button) findViewById(R.id.btn_play);
 
@@ -175,39 +195,17 @@ public class VrPanoramaActivity extends Activity {
                 QrCodeUtils.analyzeBitmap(bitmapDrawable.getBitmap(), new QrCodeUtils.AnalyzeCallback() {
                     @Override
                     public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
-                        Toast.makeText(mContext, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(mContext, "解析结果:" + result, Toast.LENGTH_LONG).show();
                         Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result));
                         mContext.startActivity(mIntent);
                     }
 
                     @Override
                     public void onAnalyzeFailed() {
-                        Toast.makeText(mContext, "解析二维码失败", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(mContext, "解析二维码失败", Toast.LENGTH_LONG).show();
                     }
                 });
                 return true;
-            }
-        });
-
-        qrCodeWeixinImageview = (ImageView) findViewById(R.id.img_qr_weixin);
-
-        qrCodeWeixinImageview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BitmapDrawable bitmapDrawable = (BitmapDrawable) qrCodeWeixinImageview.getBackground();
-                QrCodeUtils.analyzeBitmap(bitmapDrawable.getBitmap(), new QrCodeUtils.AnalyzeCallback() {
-                    @Override
-                    public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
-                        Toast.makeText(mContext, "解析结果:" + result, Toast.LENGTH_LONG).show();
-                        Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result));
-                        mContext.startActivity(mIntent);
-                    }
-
-                    @Override
-                    public void onAnalyzeFailed() {
-                        Toast.makeText(mContext, "解析二维码失败", Toast.LENGTH_LONG).show();
-                    }
-                });
             }
         });
 
@@ -540,6 +538,54 @@ public class VrPanoramaActivity extends Activity {
             }
             backgroundImageLoaderTask = new ImageLoaderTask();
             backgroundImageLoaderTask.execute(vrPanoFileInfo);
+        }
+    }
+
+
+    private class MyTurnListener implements View.OnClickListener {
+
+        boolean isExpand;  //是否翻转
+
+        @Override
+        public void onClick(View v) {
+            isExpand = !isExpand;
+            mDetailTextView.clearAnimation();  //清除动画
+            final int tempHight;
+            final int startHight = mDetailTextView.getHeight();  //起始高度
+            int durationMillis = 200;
+
+            if (isExpand) {
+                /**
+                 * 折叠效果，从长文折叠成短文
+                 */
+
+                tempHight = mDetailTextView.getLineHeight() * mDetailTextView.getLineCount() - startHight;  //为正值，长文减去短文的高度差
+                //翻转icon的180度旋转动画
+                RotateAnimation animation = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                animation.setDuration(durationMillis);
+                animation.setFillAfter(true);
+                mTurnOverImageView.startAnimation(animation);
+            } else {
+                /**
+                 * 展开效果，从短文展开成长文
+                 */
+                tempHight = mDetailTextView.getLineHeight() * MAX_TEXTVIEW_LINE_NUM - startHight;//为负值，即短文减去长文的高度差
+                //翻转icon的180度旋转动画
+                RotateAnimation animation = new RotateAnimation(180, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                animation.setDuration(durationMillis);
+                animation.setFillAfter(true);
+                mTurnOverImageView.startAnimation(animation);
+            }
+
+            Animation animation = new Animation() {
+                //interpolatedTime 为当前动画帧对应的相对时间，值总在0-1之间
+                protected void applyTransformation(float interpolatedTime, Transformation t) { //根据ImageView旋转动画的百分比来显示textview高度，达到动画效果
+                    mDetailTextView.setHeight((int) (startHight + tempHight * interpolatedTime));//原始长度+高度差*（从0到1的渐变）即表现为动画效果
+
+                }
+            };
+            animation.setDuration(durationMillis);
+            mDetailTextView.startAnimation(animation);
         }
     }
 }

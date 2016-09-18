@@ -27,13 +27,7 @@ public class DetailActivity extends Activity {
         mTextView = (TextView) findViewById(R.id.detail_text);
         mImageView = (ImageView) findViewById(R.id.turn_over_icon);
 
-       // Log.e("Test", mTextView.getLineCount() + "");
-      //  Log.e("Test", mTextView.getLineHeight() + "");
-
         mTextView.setText(R.string.paragraph1);
-
-       // Log.e("Test", mTextView.getLineCount() + "");
-       // Log.e("Test", mTextView.getLineHeight() + "");
 
         mTextView.setHeight(mTextView.getLineHeight() * maxLine);  //设置默认显示高度
 
