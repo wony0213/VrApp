@@ -17,7 +17,7 @@
         android:textColor="#ffffff"
         android:paddingRight="32dp"
         android:textSize="16sp"
-        android:text="Let's go!"/>
+        android:text="准备好了吗？"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -46,7 +46,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:onClick="getStarted"
-        android:text="GET STARTED"/>
+        android:text="立即体验"/>
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="64dp" />

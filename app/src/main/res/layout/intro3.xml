@@ -17,7 +17,7 @@
         android:textColor="#ffffff"
         android:paddingRight="32dp"
         android:textSize="16sp"
-        android:text="No Cardboard? No Problem. Select the 'Smartphone' option when you play a video."/>
+        android:text="没有VR眼镜？没关系，使用智能手机全屏观看模式"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
