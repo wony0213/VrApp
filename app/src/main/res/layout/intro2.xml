@@ -17,7 +17,7 @@
         android:textColor="#ffffff"
         android:paddingRight="32dp"
         android:textSize="16sp"
-        android:text="Watch these virtual reality videos with your Google Cardboard viewer for an immersive experience."/>
+        android:text="使用VR眼镜观看，悦享沉浸式体验"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
