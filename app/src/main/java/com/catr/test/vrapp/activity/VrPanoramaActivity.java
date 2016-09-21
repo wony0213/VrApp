@@ -41,142 +41,127 @@ import java.io.InputStream;
 import java.util.List;
 
 
-/**
- * A basic PanoWidget Activity to load panorama images from disk. It will load a test image by
- * default. It can also load an arbitrary image from disk using:
- * adb shell am start -a "android.intent.action.VIEW" \
- * -n "com.google.vr.sdk.samples.simplepanowidget/.SimpleVrPanoramaActivity" \
- * -d "/sdcard/FILENAME.JPG"
- * <p/>
- * To load stereo images, "--ei inputType 2" can be used to pass in an integer extra which will set
- * VrPanoramaView.Options.inputType.
- */
-//adb shell am start -a "android.intent.action.VIEW" -n "com.google.vr.sdk.samples.simplepanowidget/.SimpleVrPanoramaActivity" -d "/sdcard/vr_res/lab_mono.jpg"
-//adb shell am start -a "android.intent.action.VIEW" -n "com.google.vr.sdk.samples.simplepanowidget/.SimpleVrPanoramaActivity" -d "/sdcard/vr_res/andes_stereo.jpg" --ei inputType 2
-//adb shell am start -a "android.intent.action.VIEW" -n "com.catr.test.vrapp/.activity.VrPanoramaActivity" -d "/sdcard/vr_res/lab_mono.jpg"
-//Google的Demo可以用命令行打开，新建的VrApp不能用命令行打开，添加android:exported="true"后也不行
 public class VrPanoramaActivity extends Activity {
     private static final String TAG = VrPanoramaActivity.class.getSimpleName();
-    /**
-     * Actual panorama widget.
-     **/
+
+    //全景照片显示View
     private VrPanoramaView panoWidgetView;
-    /**
-     * Arbitrary variable to track load status. In this example, this variable should only be accessed
-     * on the UI thread. In a real app, this variable would be code that performs some UI actions when
-     * the panorama is fully loaded.
-     */
+    //全景照片加载成功标志位
     public boolean loadImageSuccessful;
-    /**
-     * Tracks the file to be loaded across the lifetime of this app.
-     **/
-    private Uri fileUri;
-    /**
-     * Configuration information for the panorama.
-     **/
-    private VrPanoramaView.Options panoOptions = new VrPanoramaView.Options();
+    //异步加载全景照片Task
     private ImageLoaderTask backgroundImageLoaderTask;
 
 
-    //add by glf
+    //全景照片文件信息列表
     private List<VrPanoFileInfo> vrPanoFileInfos;
+    //当前显示的全景照片文件信息
     private VrPanoFileInfo vrPanoFileInfo;
+    //记录当前显示的全景照片在文件信息列表中的位置
     private int panoramaNum = 0;
 
-    private Button playButton;
 
+    //Activity上下文
     private Context mContext;
-
-    private Vibrator vibrator;
-
-    private MediaUtil mMediaUtil;
+    //
+    private Handler mHandler;
+    //
+    private Vibrator mVibrator;
 
     //默认使用VR横屏模式
     private static final int DEFAULT_DISPLAYMODE = VrWidgetView.DisplayMode.EMBEDDED;
+    //VrWidgetView显示模式
     private int vrDisplayMode;
+
 
     //默认使用手动播放模式
     private static final String AUTO_PLAY_MODE = "auto_play_mode";
     private static final String MANUAL_PLAY_MODE = "manual_play_mode";
     private static final String DEFAULT_PLAY_MODE = AUTO_PLAY_MODE;
+    //全景照片播放模式
     private String playMode;
 
-    //自动播放时间间隔3秒钟
-    private static final int AUTO_PLAY_INTERVAL = 3;
 
-    //
+    //自动播放时间间隔3秒钟（语音播放完之后）
+    private static final int AUTO_PLAY_INTERVAL = 3;
+    //MediarPlayer播放完成监听
     private MediaPlayer.OnCompletionListener mOnCompletionListener = null;
 
-    //第一个加载的全景图片是否完成。
-    private boolean isFirstLoadSuccess = false;
 
+    //黑屏全景照片文件信息
     private VrPanoFileInfo blackPanoFileInfo;
-
     //显示黑屏标志位
     private boolean isShowBlackPano = false;
 
-    //照片切换中标志，防止响应多次点击
+
+    //第一个加载的全景图片是否完成。
+    private boolean isFirstLoadSuccess = false;
+    //照片切换中标志位，防止响应多次点击
     private boolean isPanoSwitching = false;
 
-    //
-    Handler mHandler;
 
+    //播放全景照片按钮
+    private Button playButton;
     //二维码图片
-    ImageView qrCodeWeiboImageview;
-    ImageView qrCodeWeixinImageview;
+    private ImageView qrCodeWeiboImageview;
+    private ImageView qrCodeWeixinImageview;
+    //文本域
+    private TextView mDetailTextView;
+    //翻转icon
+    private ImageView mTurnOverImageView;
+    //TextView设置默认最大展示行数为3
+    private static final int MAX_TEXTVIEW_LINE_NUM = 3;
 
-    private TextView mDetailTextView;   //文本域
-    private ImageView mTurnOverImageView;  //翻转icon
-    private static final int MAX_TEXTVIEW_LINE_NUM = 3;  //TextView设置默认最大展示行数为3
 
-    /**
-     * Called when the app is launched via the app icon or an intent using the adb command above. This
-     * initializes the app and loads the image to render.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         Log.i(TAG, "VrPanoramaActivity onCreate()");
 
-        mContext = this;
-
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_layout);
-//        setContentView(R.layout.detail_layout_temp);
 
+        //初始化
+        mContext = this;
+        mHandler = new Handler();
+        mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+
+        //设置panoWidgetView
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new ActivityEventListener());
-
+        //默认使用VR横屏模式
         Intent intent = getIntent();
         vrDisplayMode = intent.getIntExtra(VrApp.DISPLAY_MODE, DEFAULT_DISPLAYMODE);
-        //默认使用VR横屏模式
         panoWidgetView.setDisplayMode(vrDisplayMode);
-
         //去除info按钮
         panoWidgetView.setInfoButtonEnabled(false);
 
-        //默认使用手动播放模式
+
+        //设置播放模式,默认使用手动播放模式
         playMode = intent.getStringExtra(VrApp.PLAY_MODE);
         if (null == playMode) {
             playMode = DEFAULT_PLAY_MODE;
         }
 
+
+        //初始化文字显示，及展开效果
         mDetailTextView = (TextView) findViewById(R.id.detail_text);
         mTurnOverImageView = (ImageView) findViewById(R.id.turn_over_icon);
-
-        mDetailTextView.setHeight(mDetailTextView.getLineHeight() * MAX_TEXTVIEW_LINE_NUM);  //设置默认显示高度
-
-        // 根据高度来控制是否展示翻转icon
+        //设置默认显示高度
+        mDetailTextView.setHeight(mDetailTextView.getLineHeight() * MAX_TEXTVIEW_LINE_NUM);
+        //根据高度来控制是否展示翻转icon
         mDetailTextView.post(new Runnable() {
             @Override
             public void run() {
                 mTurnOverImageView.setVisibility(mDetailTextView.getLineCount() > MAX_TEXTVIEW_LINE_NUM ? View.VISIBLE : View.GONE);
             }
         });
+        //翻转监听
+        mTurnOverImageView.setOnClickListener(new MyTurnListener());
 
-        mTurnOverImageView.setOnClickListener(new MyTurnListener());  //翻转监听
 
+        //初始化播放按钮功能
         playButton = (Button) findViewById(R.id.btn_play);
-
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,8 +169,9 @@ public class VrPanoramaActivity extends Activity {
             }
         });
 
-        qrCodeWeiboImageview = (ImageView) findViewById(R.id.img_qr_weibo);
 
+        //初始化长按二维码跳转官方微博功能
+        qrCodeWeiboImageview = (ImageView) findViewById(R.id.img_qr_weibo);
         qrCodeWeiboImageview.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -207,13 +193,14 @@ public class VrPanoramaActivity extends Activity {
             }
         });
 
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
+        //初始化全景照片文件信息列表
+        vrPanoFileInfos = VrFileUtil.getVrPanoFileInfos();
+        //初始化黑屏全景照片文件信息
         blackPanoFileInfo = VrFileUtil.getBlackPanoFileInfo();
 
-        mHandler = new Handler();
 
-        //初始化mOnCompletionListener
+        //自动播放模式下，初始化mOnCompletionListener
         if (playMode == AUTO_PLAY_MODE) {
             mOnCompletionListener = new MediaPlayer.OnCompletionListener() {
                 @Override
@@ -229,46 +216,34 @@ public class VrPanoramaActivity extends Activity {
             };
         }
 
-        // Initial launch of the app or an Activity recreation due to rotation.
+        //处理Intent信息，加载相应全景照片信息
         handleIntent(getIntent());
     }
 
-    /**
-     * Called when the Activity is already running and it's given a new intent.
-     */
+
+    //Activity已经运行的情况下收到新的Intent,调用该方法
     @Override
     protected void onNewIntent(Intent intent) {
         Log.i(TAG, "VrPanoramaActivity onNewIntent()");
-        Log.i(TAG, this.hashCode() + ".onNewIntent()");
-        // Save the intent. This allows the getIntent() call in onCreate() to use this new Intent during
-        // future invocations.
+        // Save the intent. This allows the getIntent() call in onCreate() to use this new Intent during future invocations.
         setIntent(intent);
         // Load the new image.
         handleIntent(intent);
     }
 
-    /**
-     * Load custom images based on the Intent or load the default image. See the Javadoc for this
-     * class for information on generating a custom intent via adb.
-     */
+
+    //处理Intent，根据panoramaNum，从vrPanoFileInfos中加载相应的全景照片
     private void handleIntent(Intent intent) {
         panoramaNum = intent.getIntExtra(VrApp.PANORAMA_NUM, 0);
-        vrPanoFileInfos = VrFileUtil.getVrPanoFileInfos();
+
         if (vrPanoFileInfos != null && vrPanoFileInfos.size() != 0 && vrPanoFileInfos.get(panoramaNum) != null) {
             vrPanoFileInfo = vrPanoFileInfos.get(panoramaNum);
             Log.i(TAG, "show pano image " + vrPanoFileInfo.getFileName());
 
-//            panoTile.setText(vrPanoFileInfo.getFileName());
-//            panoDescription.setText(vrPanoFileInfo.getFileName());
+            MediaUtil.load(mContext, vrPanoFileInfo.getSoundResId(), vrPanoFileInfo.getSoundUri());
 
-
-//            mMediaUtil = new MediaUtil();
-            mMediaUtil.load(mContext, vrPanoFileInfo.getSoundResId(), vrPanoFileInfo.getSoundUri());
-
-            // Load the bitmap in a background thread to avoid blocking the UI thread. This operation can
-            // take 100s of milliseconds.
             if (backgroundImageLoaderTask != null) {
-                // Cancel any task from a previous intent sent to this activity.
+                //取消已经加载中的任务
                 backgroundImageLoaderTask.cancel(true);
             }
             backgroundImageLoaderTask = new ImageLoaderTask();
@@ -278,29 +253,31 @@ public class VrPanoramaActivity extends Activity {
 
     @Override
     protected void onPause() {
+        super.onPause();
+
         Log.i(TAG, "VrPanoramaActivity onPause()");
+
         panoWidgetView.pauseRendering();
 
-        mMediaUtil.stop();
-        super.onPause();
+        MediaUtil.stop();
     }
 
     @Override
     protected void onResume() {
+        super.onResume();
+
         Log.i(TAG, "VrPanoramaActivity onResume()");
         Log.i(TAG, "VrPanoramaActivity onResume()   vrDisplayMode=" + vrDisplayMode);
-        super.onResume();
+
         panoWidgetView.resumeRendering();
 
         if (isFirstLoadSuccess) {
-            //gvr 0.8.5，为FULLSCREEN_VR和FULLSCREEN_MONO
-            //gvr 0.9.1，改为FULLSCREEN_STEREO和FULLSCREEN_MONO
             if (vrDisplayMode == VrWidgetView.DisplayMode.FULLSCREEN_STEREO || vrDisplayMode == VrWidgetView.DisplayMode.FULLSCREEN_MONO) {
                 Log.i(TAG, "VrPanoramaActivity onResume()    " + "vrDisplayMode=" + vrDisplayMode + "    mMediaUtil.play()");
-                boolean playSucceed = mMediaUtil.play();
+                boolean playSucceed = MediaUtil.play();
                 //设置自动播放
                 if (playMode == AUTO_PLAY_MODE) {
-                    mMediaUtil.setOnCompletionListener(mOnCompletionListener);
+                    MediaUtil.setOnCompletionListener(mOnCompletionListener);
                 }
                 if (!playSucceed) {
                     Log.i(TAG, "VrPanoramaActivity onResume()" + "音乐播放失败");
@@ -311,18 +288,19 @@ public class VrPanoramaActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
+
         Log.i(TAG, "VrPanoramaActivity onDestroy()");
+
         // Destroy the widget and free memory.
         panoWidgetView.shutdown();
 
-        mMediaUtil.release();
+        MediaUtil.release();
 
-        // The background task has a 5 second timeout so it can potentially stay alive for 5 seconds
-        // after the activity is destroyed unless it is explicitly cancelled.
+        // The background task has a 5 second timeout so it can potentially stay alive for 5 seconds after the activity is destroyed unless it is explicitly cancelled.
         if (backgroundImageLoaderTask != null) {
             backgroundImageLoaderTask.cancel(true);
         }
-        super.onDestroy();
     }
 
     @Override
@@ -396,17 +374,17 @@ public class VrPanoramaActivity extends Activity {
             isFirstLoadSuccess = true;
             if (vrDisplayMode == VrWidgetView.DisplayMode.FULLSCREEN_MONO || vrDisplayMode == VrWidgetView.DisplayMode.FULLSCREEN_STEREO) {
                 Log.i(TAG, "ActivityEventListener onLoadSuccess()    " + "vrDisplayMode=" + vrDisplayMode + "    mMediaUtil.play()");
-                boolean playSucceed = mMediaUtil.play();
+                boolean playSucceed = MediaUtil.play();
                 //设置自动播放
                 if (playMode == AUTO_PLAY_MODE) {
-                    mMediaUtil.setOnCompletionListener(mOnCompletionListener);
+                    MediaUtil.setOnCompletionListener(mOnCompletionListener);
                 }
                 if (!playSucceed) {
                     Log.i(TAG, "ActivityEventListener onLoadSuccess()" + "音乐播放失败");
                 }
             } else {
                 Log.i(TAG, "ActivityEventListener onLoadSuccess()    " + "vrDisplayMode=" + vrDisplayMode + "    mMediaUtil.stop()");
-                mMediaUtil.stop();
+                MediaUtil.stop();
             }
 
             //全景照片切换结束
@@ -456,7 +434,7 @@ public class VrPanoramaActivity extends Activity {
                     isPanoSwitching = true;
 
                     //震动
-                    vibrator.vibrate(50);
+                    mVibrator.vibrate(50);
 
                     //显示黑屏（带Logo）
                     // loadBlackPano();
@@ -470,9 +448,8 @@ public class VrPanoramaActivity extends Activity {
     private void loadBlackPano() {
         //设置显示黑屏标志位
         isShowBlackPano = true;
-        mMediaUtil.load(mContext, blackPanoFileInfo.getSoundResId(), blackPanoFileInfo.getSoundUri());
+        MediaUtil.load(mContext, blackPanoFileInfo.getSoundResId(), blackPanoFileInfo.getSoundUri());
         if (backgroundImageLoaderTask != null) {
-            // Cancel any task from a previous intent sent to this activity.
             backgroundImageLoaderTask.cancel(true);
         }
         backgroundImageLoaderTask = new ImageLoaderTask();
@@ -490,20 +467,14 @@ public class VrPanoramaActivity extends Activity {
             panoramaNum = panoramaNum - vrPanoFileInfos.size();
         vrPanoFileInfo = vrPanoFileInfos.get(panoramaNum);
 
-//        panoTile.setText(vrPanoFileInfo.getFileName());
-//        panoDescription.setText(vrPanoFileInfo.getFileName());
-
         //如果切换回第一张，则结束播放
         if (panoramaNum == 0) {
             panoWidgetView.setDisplayMode(VrWidgetView.DisplayMode.EMBEDDED);
         }
 
-        mMediaUtil.load(mContext, vrPanoFileInfo.getSoundResId(), vrPanoFileInfo.getSoundUri());
+        MediaUtil.load(mContext, vrPanoFileInfo.getSoundResId(), vrPanoFileInfo.getSoundUri());
 
-        // Load the bitmap in a background thread to avoid blocking the UI thread. This operation can
-        // take 100s of milliseconds.
         if (backgroundImageLoaderTask != null) {
-            // Cancel any task from a previous intent sent to this activity.
             backgroundImageLoaderTask.cancel(true);
         }
         backgroundImageLoaderTask = new ImageLoaderTask();
@@ -523,15 +494,12 @@ public class VrPanoramaActivity extends Activity {
             panoramaNum = 0;
             vrPanoFileInfo = vrPanoFileInfos.get(panoramaNum);
 
-            mMediaUtil.load(mContext, vrPanoFileInfo.getSoundResId(), vrPanoFileInfo.getSoundUri());
+            MediaUtil.load(mContext, vrPanoFileInfo.getSoundResId(), vrPanoFileInfo.getSoundUri());
 
             //使用双眼模式
             panoWidgetView.setDisplayMode(VrWidgetView.DisplayMode.FULLSCREEN_STEREO);
 
-            // Load the bitmap in a background thread to avoid blocking the UI thread. This operation can
-            // take 100s of milliseconds.
             if (backgroundImageLoaderTask != null) {
-                // Cancel any task from a previous intent sent to this activity.
                 backgroundImageLoaderTask.cancel(true);
             }
             backgroundImageLoaderTask = new ImageLoaderTask();
@@ -540,6 +508,7 @@ public class VrPanoramaActivity extends Activity {
     }
 
 
+    //折叠、展开效果
     private class MyTurnListener implements View.OnClickListener {
 
         boolean isExpand;  //是否翻转
@@ -556,7 +525,6 @@ public class VrPanoramaActivity extends Activity {
                 /**
                  * 折叠效果，从长文折叠成短文
                  */
-
                 tempHight = mDetailTextView.getLineHeight() * mDetailTextView.getLineCount() - startHight;  //为正值，长文减去短文的高度差
                 //翻转icon的180度旋转动画
                 RotateAnimation animation = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -579,7 +547,6 @@ public class VrPanoramaActivity extends Activity {
                 //interpolatedTime 为当前动画帧对应的相对时间，值总在0-1之间
                 protected void applyTransformation(float interpolatedTime, Transformation t) { //根据ImageView旋转动画的百分比来显示textview高度，达到动画效果
                     mDetailTextView.setHeight((int) (startHight + tempHight * interpolatedTime));//原始长度+高度差*（从0到1的渐变）即表现为动画效果
-
                 }
             };
             animation.setDuration(durationMillis);
