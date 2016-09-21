@@ -32,8 +32,6 @@
         </activity>
 
         <activity android:name=".appintro.AppIntroActivity"/>
-        <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".activity.PanoListActivity"/>
     </application>
 
 </manifest>

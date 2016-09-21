@@ -87,22 +87,6 @@ public class LaunchActivity extends PermissionCheckActivity {
         finish();
     }
 
-    private void startMainActivity() {
-        //启动Activity，并finish（）
-        Intent intent = new Intent(this, PanoListActivity.class);
-        startActivity(intent);
-        //结束LaunchActivity
-        finish();
-    }
-
-    private void startPanoListActivity() {
-        //启动Activity，并finish（）
-        Intent intent = new Intent(this, PanoListActivity.class);
-        startActivity(intent);
-        //结束LaunchActivity
-        finish();
-    }
-
     private void startVrPanoActivity(int display_mode) {
         //启动Activity，并finish（）
         Intent intent = new Intent(this, VrPanoramaActivity.class);
