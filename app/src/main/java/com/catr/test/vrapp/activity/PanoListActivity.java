@@ -3,6 +3,7 @@ package com.catr.test.vrapp.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -10,6 +11,7 @@ import android.widget.ListView;
 
 import com.catr.test.vrapp.R;
 import com.catr.test.vrapp.adapter.PanoListAdapter;
+import com.catr.test.vrapp.adapter.SceneryListAdapter;
 import com.catr.test.vrapp.model.SceneryInfo;
 import com.catr.test.vrapp.utils.SceneryInfoUtil;
 
@@ -18,7 +20,8 @@ import com.catr.test.vrapp.utils.SceneryInfoUtil;
  */
 public class PanoListActivity extends Activity {
     private ListView mListView;
-    private PanoListAdapter mAdapter;
+//    private PanoListAdapter mAdapter;
+    private SceneryListAdapter mAdapter;
     private int mCurrentItem;
 
     @Override
@@ -26,31 +29,44 @@ public class PanoListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_listview);
         mListView = (ListView) findViewById(R.id.video_lv);
-        mAdapter = new PanoListAdapter(this, SceneryInfoUtil.getSceneryInfos());
+//        mAdapter = new PanoListAdapter(this, SceneryInfoUtil.getSceneryInfos());
+        mAdapter = new SceneryListAdapter(this, SceneryInfoUtil.getSceneryInfos());
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplication(), VrPanoramaActivity.class);
-                intent.putExtra(VrApp.PANORAMA_NUM, position);
-                startActivity(intent);
-                finish();
+//                Intent intent = new Intent(getApplication(), VrPanoramaActivity.class);
+//                intent.putExtra(VrApp.PANORAMA_NUM, position);
+//                startActivity(intent);
+//                finish();
             }
         });
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                int firstVisibleItem = mListView.getFirstVisiblePosition();
+                Log.e("Test", scrollState + "");
+                if ((scrollState == SCROLL_STATE_FLING || scrollState == SCROLL_STATE_TOUCH_SCROLL) && mAdapter.getScrollState() == SCROLL_STATE_IDLE) {
+                    mAdapter.setScrollState(scrollState);
+                    mAdapter.notifyDataSetChanged();
+                    return;
+                }
+
                 if (scrollState == SCROLL_STATE_IDLE) {
+                    mAdapter.setScrollState(scrollState);
+                    int firstVisibleItem = mListView.getFirstVisiblePosition();
                     if (null != mListView.getChildAt(0)) {
                         if (mListView.getChildAt(0).getTop() >= 0) {
                             mCurrentItem = firstVisibleItem;
                         } else {
                             mCurrentItem = firstVisibleItem + 1;
                         }
-                        mAdapter.setCurrentItem(mCurrentItem);
-                        mAdapter.notifyDataSetChanged();
+                        //add by glf
+                        if (mCurrentItem != mAdapter.getCurrentItem()) {
+                            mAdapter.setCurrentItem(mCurrentItem);
+                            mAdapter.notifyDataSetChanged();
+                        }
                     }
+                    return;
                 }
             }
 
